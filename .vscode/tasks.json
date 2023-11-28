@@ -1,0 +1,33 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "Apocalypso build",
+            "command": "/usr/bin/g++",
+            "args": [
+                "-std=c++17",
+                "-I${workspaceFolder}/include",
+                "-fdiagnostics-color=always",
+                "-g",
+                "${workspaceFolder}/src/*.cpp",
+                "-lSDL2",
+                "-lSDL2_image",
+                "-lSDL2_ttf",
+                "-o",
+                "${workspaceFolder}/apocalypso"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Apocalypso build configuration"
+        }
+    ],
+    "version": "2.0.0"
+}
