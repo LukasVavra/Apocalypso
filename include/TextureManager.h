@@ -25,5 +25,7 @@ public:
 	void clean();
 private:
 	TextureManager();
+	TextureManager(const TextureManager&) = delete;
+    TextureManager& operator=(const TextureManager&) = delete;
 	std::map<const char *, SDL_Texture *> textures;
 };

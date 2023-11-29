@@ -24,7 +24,7 @@ void MotionSystem::set_target(long unsigned id, Vec target)
 
 void MotionSystem::update()
 {
-    for (const auto &p : instance().ctnr)
+    for (const auto &p : ctnr)
     {
         
         auto pod = p.second;
@@ -33,7 +33,7 @@ void MotionSystem::update()
         auto distance = Vecmath::size(dir);
         if (distance < 1)
         {
-            instance().ctnr.erase(p.first);
+            ctnr.erase(p.first);
             break;
         }
         Vecmath::normalize(dir);

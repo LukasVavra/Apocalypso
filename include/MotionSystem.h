@@ -25,5 +25,7 @@ public:
 
 private:
     MotionSystem();
+    MotionSystem(const MotionSystem&) = delete;
+    MotionSystem& operator=(const MotionSystem&) = delete;
     std::map<long unsigned, MotionPOD> ctnr;
 };

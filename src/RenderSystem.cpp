@@ -4,12 +4,12 @@
 
 void RenderSystem::add(long unsigned id, SDL_Rect src, SDL_Rect des, SDL_Texture *tex)
 {
-    instance().ctnr.add(id, src, des, tex);
+    ctnr.add(id, src, des, tex);
 }
 
 RenderSystem::RenderPOD *RenderSystem::get(long unsigned id)
 {
-    return instance().ctnr.get(id);
+    return ctnr.get(id);
 }
 
 void RenderSystem::sort()
@@ -18,17 +18,17 @@ void RenderSystem::sort()
     {
         return (a.des.y + a.des.h) < (b.des.y + b.des.h);
     };
-    instance().ctnr.sort(sort_f);
+    ctnr.sort(sort_f);
 }
 
 void RenderSystem::remove(long unsigned id)
 {
-    instance().ctnr.remove(id);
+    ctnr.remove(id);
 }
 
 void RenderSystem::render(SDL_Renderer *renderer)
 {
-    for (auto &pod : instance().ctnr)
+    for (auto &pod : ctnr)
     {
         SDL_Rect dest(pod.des);
         if(camera) camera->update_render(dest);
@@ -38,7 +38,7 @@ void RenderSystem::render(SDL_Renderer *renderer)
 
 void RenderSystem::set_position(long unsigned id, double &x, double &y, int &level)
 {
-    auto pod = instance().ctnr.get(id);
+    auto pod = ctnr.get(id);
     if(pod)
     {
         pod->des.x = (x - pod->des.w / 2) - (level * 32);
@@ -53,8 +53,4 @@ void RenderSystem::set_position(long unsigned id, double &x, double &y, int &lev
 void RenderSystem::set_camera(Camera *camera)
 {
     this->camera = camera;
-}
-
-RenderSystem::RenderSystem() : camera(nullptr)
-{
 }

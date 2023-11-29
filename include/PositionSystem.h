@@ -29,5 +29,7 @@ public:
 
 private:
     PositionSystem();
+    PositionSystem(const PositionSystem&) = delete;
+    PositionSystem& operator=(const PositionSystem&) = delete;
     PODContainer<PositionPOD, 128> ctnr;
 };

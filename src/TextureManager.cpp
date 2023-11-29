@@ -2,15 +2,14 @@
 
 SDL_Texture* TextureManager::load_texture(const char *path, SDL_Renderer *renderer)
 {
-	auto tm = TextureManager::instance();
-	if(tm.textures.count(path))
+	if(TextureManager::instance().textures.count(path))
 	{
-		return tm.textures[path];
+		return TextureManager::instance().textures[path];
 	}
 	SDL_Surface* temp = IMG_Load(path);
 	SDL_Texture* tex = SDL_CreateTextureFromSurface(renderer, temp);
 	SDL_FreeSurface(temp);
-	tm.textures[path] = tex;
+	TextureManager::instance().textures[path] = tex;
 	return tex;
 }
 

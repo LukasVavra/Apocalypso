@@ -30,7 +30,9 @@ public:
     }
 
 private:
-    RenderSystem();
+    RenderSystem() = default;
+    RenderSystem(const RenderSystem&) = delete;
+    RenderSystem& operator=(const RenderSystem&) = delete;
     PODContainer<RenderPOD, 128> ctnr;
-    Camera *camera;
+    Camera *camera = nullptr;
 };

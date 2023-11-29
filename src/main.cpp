@@ -17,10 +17,10 @@ static SDL_Renderer *renderer;
  * Apocalypso system
  */
 Camera camera;
-auto rendersys = RenderSystem::instance();
-auto positionsys = PositionSystem::instance();
-auto motionsys = MotionSystem::instance();
-auto mouseman = MouseManager::instance();
+#define rendersys   RenderSystem::instance()
+#define positionsys PositionSystem::instance()
+#define motionsys   MotionSystem::instance()
+#define mouseman    MouseManager::instance()
 
 static bool running;
 
