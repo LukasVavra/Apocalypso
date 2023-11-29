@@ -42,8 +42,6 @@ void init_objects()
     rendersys.add(id, src, des, tex);
     positionsys.add(id, Vec());
     positionsys.set_position(id, Vec(100, 100));
-    mouseman.set_controlled_id(id);
-    camera.watch_id(id);
 }
 
 void init()

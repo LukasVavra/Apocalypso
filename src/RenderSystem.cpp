@@ -54,3 +54,15 @@ void RenderSystem::set_camera(Camera *camera)
 {
     this->camera = camera;
 }
+
+long unsigned RenderSystem::get_clicked_id(int &x, int &y)
+{
+    SDL_Point point{x, y};
+    for (auto &pod : ctnr)
+    {
+        SDL_Rect area(pod.des);
+        if(camera) camera->update_render(area);
+        if(SDL_PointInRect(&point, &area)) return pod.id;
+    }
+    return 0;
+}

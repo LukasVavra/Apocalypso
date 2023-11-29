@@ -22,6 +22,7 @@ public:
     void render(SDL_Renderer *renderer);
     void set_position(long unsigned id, double& x, double& y, int& level);
     void set_camera(Camera *camera);
+    long unsigned get_clicked_id(int &x, int &y);
 
     static RenderSystem &instance()
     {

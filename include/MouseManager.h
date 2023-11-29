@@ -23,6 +23,6 @@ private:
     MouseManager(const MouseManager&) = delete;
     MouseManager& operator=(const MouseManager&) = delete;
     long unsigned controlled_id;
-    Vec click_point;
+    Vec cpoint;
     Camera * camera;
 };
