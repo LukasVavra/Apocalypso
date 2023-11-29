@@ -16,7 +16,8 @@ public:
 
     void set_controlled_id(long unsigned id);
     void set_camera(Camera* camera);
-    void invoke(int& x, int& y);
+    void left_btn(int& x, int& y);
+    void right_btn(int& x, int& y);
 
 private:
     MouseManager();

@@ -108,7 +108,14 @@ void handle_events()
         {
             int x, y;
             SDL_GetMouseState(&x, &y);
-            mouseman.invoke(x, y);
+            if(event.button.button == SDL_BUTTON_LEFT)
+            {
+                mouseman.left_btn(x, y);
+            }
+            else 
+            {
+                mouseman.right_btn(x, y);
+            }
         }
     }
 }

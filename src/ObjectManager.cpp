@@ -36,6 +36,11 @@ void ObjectManager::loadObjects(const char *filepath)
                 SDL_Rect src{rect["x"], rect["y"], rect["w"], rect["h"]};
                 RenderSystem::instance().add(id, src, src, tex);
                 auto pos_pod = PositionSystem::instance().get(id);
+                if(!pos_pod)
+                {
+                    cout << "There is no Position POD for id " << id << "\n";
+                    return;
+                }
                 RenderSystem::instance().set_position(id, pos_pod->pos.x, pos_pod->pos.y, pos_pod->level);
             }
         }
