@@ -33,18 +33,6 @@ const int FRAME_DELAY = 1000 / 60;
 uint32_t frame_begin_time;
 int frame_time;
 
-
-void init_objects()
-{
-    int id = 5;
-    auto tex = TextureManager::load_texture("texture/crystals.png", renderer);
-    SDL_Rect src = {0, 0, 64, 64};
-    SDL_Rect des = {0, 0, 64, 64};
-    rendersys.add(id, src, des, tex);
-    positionsys.add(id, Vec());
-    positionsys.set_position(id, Vec(100, 100));
-}
-
 void init()
 {
     /*
@@ -72,8 +60,6 @@ void init()
     renderer = SDL_CreateRenderer(window, -1, 0);
     RenderSystem::renderer = renderer;
     assert(renderer && "RENDERER INIT");
-
-    init_objects();
 
     /*
      * Start loop
