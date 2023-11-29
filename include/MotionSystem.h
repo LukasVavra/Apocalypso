@@ -12,6 +12,7 @@ public:
         long unsigned id;
         Vec target;
         double speed;
+        Vec step;
     };
 
     static MotionSystem &instance()
