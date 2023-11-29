@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+SDL_Renderer* RenderSystem::renderer = nullptr;
+
 void RenderSystem::add(long unsigned id, SDL_Rect src, SDL_Rect des, SDL_Texture *tex)
 {
     ctnr.add(id, src, des, tex);
@@ -26,7 +28,7 @@ void RenderSystem::remove(long unsigned id)
     ctnr.remove(id);
 }
 
-void RenderSystem::render(SDL_Renderer *renderer)
+void RenderSystem::render()
 {
     for (auto &pod : ctnr)
     {

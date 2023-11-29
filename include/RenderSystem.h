@@ -7,6 +7,7 @@
 class RenderSystem
 {
 public:
+    static SDL_Renderer *renderer;
     struct RenderPOD
     {
         long unsigned id;
@@ -19,7 +20,7 @@ public:
     RenderPOD *get(long unsigned id);
     void sort();
     void remove(long unsigned id);
-    void render(SDL_Renderer *renderer);
+    void render();
     void set_position(long unsigned id, double& x, double& y, int& level);
     void set_camera(Camera *camera);
     long unsigned get_clicked_id(int &x, int &y);

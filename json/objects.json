@@ -1,0 +1,16 @@
+[{
+    "name" : "stone",
+    "position": {
+      "x": 100,
+      "y": 200
+    },
+    "render": {
+        "texture" : "texture/pedrita.png",
+        "src" : {
+            "x" : 0,
+            "y" : 0,
+            "w" : 64,
+            "h" : 64
+        }
+    }
+}]

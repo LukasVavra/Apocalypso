@@ -1,7 +1,9 @@
 #include <TextureManager.h>
+#include <assert.h>
 
 SDL_Texture* TextureManager::load_texture(const char *path, SDL_Renderer *renderer)
 {
+	assert(renderer);
 	if(TextureManager::instance().textures.count(path))
 	{
 		return TextureManager::instance().textures[path];

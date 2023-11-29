@@ -12,6 +12,7 @@ MotionSystem::MotionSystem()
 void MotionSystem::set_target(long unsigned id, Vec target)
 {
     auto pos = PositionSystem::instance().get(id);
+    if(!pos) return;
     auto step = target - pos->pos;
     Vecmath::normalize(step);
     if (ctnr.count(id))

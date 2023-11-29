@@ -3,6 +3,7 @@
 #include <TextureManager.h>
 #include <Camera.h>
 #include <MouseManager.h>
+#include <ObjectManager.h>
 #include <SDL2/SDL.h>
 #include <assert.h>
 #include <iostream>
@@ -10,8 +11,8 @@
 /**
  * SDL system
  */
-static SDL_Window *window;
-static SDL_Renderer *renderer;
+static SDL_Window *window = nullptr;
+static SDL_Renderer *renderer = nullptr;
 
 /**
  * Apocalypso system
@@ -35,7 +36,7 @@ int frame_time;
 
 void init_objects()
 {
-    int id = 1;
+    int id = 5;
     auto tex = TextureManager::load_texture("texture/crystals.png", renderer);
     SDL_Rect src = {0, 0, 64, 64};
     SDL_Rect des = {0, 0, 64, 64};
@@ -69,6 +70,7 @@ void init()
      * Create SDL Renderer
      */
     renderer = SDL_CreateRenderer(window, -1, 0);
+    RenderSystem::renderer = renderer;
     assert(renderer && "RENDERER INIT");
 
     init_objects();
@@ -121,7 +123,7 @@ void render()
 {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
-    rendersys.render(renderer);
+    rendersys.render();
     SDL_RenderPresent(renderer);
 }
 
@@ -136,6 +138,7 @@ void clean()
 int main()
 {
     init();
+    ObjectManager::instance().loadObjects("json/objects.json");
     while (running)
     {
         frame_begin_time = SDL_GetTicks();
