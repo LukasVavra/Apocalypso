@@ -30,8 +30,9 @@ void RenderSystem::render(SDL_Renderer *renderer)
 {
     for (auto &pod : instance().ctnr)
     {
-        if(camera) camera->update_render(pod.des);
-        SDL_RenderCopy(renderer, pod.tex, &pod.src, &pod.des);
+        SDL_Rect dest(pod.des);
+        if(camera) camera->update_render(dest);
+        SDL_RenderCopy(renderer, pod.tex, &pod.src, &dest);
     }
 }
 
