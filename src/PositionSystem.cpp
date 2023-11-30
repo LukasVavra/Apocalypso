@@ -29,7 +29,3 @@ void PositionSystem::set_position(long unsigned id, Vec position, int &level)
     ctnr.get(id)->level = level;
     RenderSystem::instance().set_position(id, position.x, position.y, level);
 }
-
-PositionSystem::PositionSystem()
-{
-}

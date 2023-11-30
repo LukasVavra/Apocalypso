@@ -13,4 +13,21 @@
             "h" : 64
         }
     }
+},
+{
+    "name" : "human",
+    "position": {
+      "x": 300,
+      "y": 300
+    },
+    "movable" : true,
+    "render": {
+        "texture" : "texture/male-sprite.png",
+        "src" : {
+            "x" : 0,
+            "y" : 128,
+            "w" : 64,
+            "h" : 64
+        }
+    }
 }]

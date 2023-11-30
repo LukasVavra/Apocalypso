@@ -23,10 +23,12 @@ public:
 
     void set_target(long unsigned id, Vec target);
     void update();
+    void set_movable(long unsigned id);
 
 private:
     MotionSystem();
     MotionSystem(const MotionSystem&) = delete;
     MotionSystem& operator=(const MotionSystem&) = delete;
     std::map<long unsigned, MotionPOD> ctnr;
+    std::map<long unsigned, bool> movable;
 };

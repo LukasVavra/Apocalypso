@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <PositionSystem.h>
+#include <MotionSystem.h>
 #include <RenderSystem.h>
 #include <TextureManager.h>
 #include <SDL2/SDL.h>
@@ -22,6 +23,14 @@ void ObjectManager::loadObjects(const char *filepath)
             {
                 auto pos = obj["position"];
                 PositionSystem::instance().add(id, Vec(pos["x"], pos["y"]));
+            }
+            if(obj.containsKey("movable"))
+            {
+                auto movable = obj["movable"].as<bool>();
+                if(movable)
+                {
+                    MotionSystem::instance().set_movable(id);
+                }
             }
             if(obj.containsKey("render"))
             {

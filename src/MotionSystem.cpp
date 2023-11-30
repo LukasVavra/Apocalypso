@@ -11,6 +11,7 @@ MotionSystem::MotionSystem()
 
 void MotionSystem::set_target(long unsigned id, Vec target)
 {
+    if(!movable[id]) return;
     auto pos = PositionSystem::instance().get(id);
     if(!pos) return;
     auto step = target - pos->pos;
@@ -49,4 +50,9 @@ void MotionSystem::update()
             PositionSystem::instance().set_position(pod.id, pos->pos + pod.step, pos->level);
         }
     }
+}
+
+void MotionSystem::set_movable(long unsigned id)
+{
+    movable.insert(std::pair<long unsigned, bool>(id, true));
 }
