@@ -4,6 +4,7 @@
 #include <Camera.h>
 #include <MouseManager.h>
 #include <ObjectManager.h>
+#include <MapManager.h>
 #include <SDL2/SDL.h>
 #include <assert.h>
 #include <iostream>

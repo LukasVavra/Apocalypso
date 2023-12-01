@@ -5,10 +5,6 @@
 
 #include <iostream>
 
-MotionSystem::MotionSystem()
-{
-}
-
 void MotionSystem::set_target(long unsigned id, Vec target)
 {
     if(!movable[id]) return;

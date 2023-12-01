@@ -35,7 +35,3 @@ void TextureManager::clean()
 	}
 	textures.clear();
 }
-
-TextureManager::TextureManager()
-{
-}

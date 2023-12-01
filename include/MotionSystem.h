@@ -3,8 +3,9 @@
 #include <Vec.h>
 #include <map>
 #include <SDL2/SDL.h>
+#include <Singleton.h>
 
-class MotionSystem
+class MotionSystem : public Singleton<MotionSystem>
 {
 public:
     struct MotionPOD
@@ -15,20 +16,11 @@ public:
         Vec step;
     };
 
-    static MotionSystem &instance()
-    {
-        static MotionSystem system;
-        return system;
-    }
-
     void set_target(long unsigned id, Vec target);
     void update();
     void set_movable(long unsigned id);
 
 private:
-    MotionSystem();
-    MotionSystem(const MotionSystem&) = delete;
-    MotionSystem& operator=(const MotionSystem&) = delete;
     std::map<long unsigned, MotionPOD> ctnr;
     std::map<long unsigned, bool> movable;
 };

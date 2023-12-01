@@ -1,11 +1,11 @@
 #pragma once
 
 #include <Vec.h>
-
 #include <PODContainer.h>
 #include <SDL2/SDL.h>
+#include <Singleton.h>
 
-class PositionSystem
+class PositionSystem : public Singleton<PositionSystem>
 {
 public:
     struct PositionPOD
@@ -21,15 +21,6 @@ public:
     void set_position(long unsigned id, Vec position);
     void set_position(long unsigned id, Vec position, int& level);
 
-    static PositionSystem &instance()
-    {
-        static PositionSystem system;
-        return system;
-    }
-
 private:
-    PositionSystem() = default;
-    PositionSystem(const PositionSystem&) = delete;
-    PositionSystem& operator=(const PositionSystem&) = delete;
     PODContainer<PositionPOD, 128> ctnr;
 };

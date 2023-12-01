@@ -3,8 +3,9 @@
 #include <Camera.h>
 #include <PODContainer.h>
 #include <SDL2/SDL.h>
+#include <Singleton.h>
 
-class RenderSystem
+class RenderSystem : public Singleton<RenderSystem>
 {
 public:
     static SDL_Renderer *renderer;
@@ -25,16 +26,7 @@ public:
     void set_camera(Camera *camera);
     long unsigned get_clicked_id(int &x, int &y);
 
-    static RenderSystem &instance()
-    {
-        static RenderSystem system;
-        return system;
-    }
-
 private:
-    RenderSystem() = default;
-    RenderSystem(const RenderSystem&) = delete;
-    RenderSystem& operator=(const RenderSystem&) = delete;
     PODContainer<RenderPOD, 128> ctnr;
     Camera *camera = nullptr;
 };

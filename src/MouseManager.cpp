@@ -2,10 +2,6 @@
 #include <RenderSystem.h>
 #include <iostream>
 
-MouseManager::MouseManager() : camera(nullptr)
-{
-}
-
 void MouseManager::set_controlled_id(long unsigned id)
 {
     controlled_id = id;
