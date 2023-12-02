@@ -12,8 +12,8 @@ public:
 	/*
 	 * Static
 	 */
-	static SDL_Texture *load_texture(const char *path, SDL_Renderer *renderer);
-	static SDL_Texture *load_texture_add_text(const char *path, SDL_Renderer *renderer, const char *text, TTF_Font *font, SDL_Color color);
+	static SDL_Texture *load_texture(const char *path);
+	static SDL_Texture *load_texture_add_text(const char *path, const char *text, TTF_Font *font, SDL_Color color);
 	/*
 	 * Instance
 	 */

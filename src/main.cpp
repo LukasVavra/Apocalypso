@@ -23,6 +23,7 @@ Camera camera;
 #define positionsys PositionSystem::instance()
 #define motionsys   MotionSystem::instance()
 #define mouseman    MouseManager::instance()
+#define mapman      MapManager::instance()
 
 static bool running;
 
@@ -54,6 +55,7 @@ void init()
     camera.set_map_size(1000, 1000);
     rendersys.set_camera(&camera);
     mouseman.set_camera(&camera);
+    mapman.set_camera(&camera);
 
     /*
      * Create SDL Renderer
@@ -61,6 +63,11 @@ void init()
     renderer = SDL_CreateRenderer(window, -1, 0);
     RenderSystem::renderer = renderer;
     assert(renderer && "RENDERER INIT");
+
+    /*
+     * Create map
+     */
+    mapman.init();
 
     /*
      * Start loop

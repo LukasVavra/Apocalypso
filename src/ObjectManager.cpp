@@ -36,7 +36,7 @@ void ObjectManager::loadObjects(const char *filepath)
             {
                 auto ren = obj["render"];
                 const char* path = ren["texture"];
-                auto tex = TextureManager::load_texture(path, RenderSystem::renderer);
+                auto tex = TextureManager::load_texture(path);
                 if(!tex)
                 {
                     cout << "Texture " << path << " not found! \n";

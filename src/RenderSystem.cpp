@@ -1,5 +1,5 @@
 #include <RenderSystem.h>
-
+#include <MapManager.h>
 #include <iostream>
 
 SDL_Renderer* RenderSystem::renderer = nullptr;
@@ -30,6 +30,7 @@ void RenderSystem::remove(long unsigned id)
 
 void RenderSystem::render()
 {
+    MapManager::instance().render();
     for (auto &pod : ctnr)
     {
         SDL_Rect dest(pod.des);
