@@ -40,7 +40,7 @@ void Vec::set_xy(double x, double y)
 	this->y = y;
 }
 
-bool Vec::operator==(Vec &rhs)
+bool Vec::operator==(const Vec &rhs) const
 {
 	return (x == rhs.x) && (y == rhs.y);
 }

@@ -21,7 +21,7 @@ public:
     Vec &operator=(const Vec &v);
     void set_xy(double x, double y);
     void set_position(Vec &pos);
-	bool operator==(Vec &rhs);
+	bool operator==(const Vec &rhs) const;
 	bool operator!=(Vec &rhs);
 	Vec operator-(Vec &rhs);
 	Vec operator+(Vec &rhs);
