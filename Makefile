@@ -1,6 +1,6 @@
 CXX = /usr/bin/g++
 CXXFLAGS = -std=c++17 -Iinclude -Ilib -fdiagnostics-color=always -g
-LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf -pthread
+LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 SRC_DIR = src
 OBJ_DIR = obj
 TEST_DIR = test
@@ -10,8 +10,7 @@ TEST_EXEC = test_runner
 SRCS = $(wildcard $(SRC_DIR)/*.cpp)
 OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS))
 
-# Exclude main.cpp from test build
-TEST_SRCS := $($(wildcard $(TEST_DIR)/*.cpp))
+TEST_SRCS := $(wildcard $(TEST_DIR)/*.cpp)
 TEST_OBJS := $(patsubst $(TEST_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(TEST_SRCS))
 
 .PHONY: all clean test
@@ -27,8 +26,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 
 test: $(TEST_EXEC)
 
-$(TEST_EXEC): $(filter-out $(OBJ_DIR)/main.o, $(OBJS)) $(TEST_OBJS)
-	$(CXX) $(CXXFLAGS) -I/usr/local/include/ -L/usr/local/lib $^ -o $@ $(LDFLAGS) -lgtest_main -lgtest
+$(TEST_EXEC): $(filter-out $(OBJ_DIR)/main.o, $(OBJS)) $(TEST_OBJS) 
+	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS) -lgtest -lgtest_main -pthread
 
 $(OBJ_DIR)/%.o: $(TEST_DIR)/%.cpp
 	@mkdir -p $(OBJ_DIR)
