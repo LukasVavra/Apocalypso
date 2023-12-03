@@ -28,7 +28,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 test: $(TEST_EXEC)
 
 $(TEST_EXEC): $(filter-out $(OBJ_DIR)/main.o, $(OBJS)) $(TEST_OBJS)
-	$(CXX) $(CXXFLAGS) -I/usr/local/include/ -L/usr/local/lib $^ -o $@ $(LDFLAGS) -lgtest -lgtest_main
+	$(CXX) $(CXXFLAGS) -I/usr/local/include/ -L/usr/local/lib $^ -o $@ $(LDFLAGS) -lgtest_main -lgtest -lgmock_main -lgmock
 
 $(OBJ_DIR)/%.o: $(TEST_DIR)/%.cpp
 	@mkdir -p $(OBJ_DIR)
