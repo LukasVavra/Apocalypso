@@ -22,8 +22,11 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
         
-    - name: make
+    - name: Build app
       run: make
 
-    - name: make test
+    - name: Build test
       run: make test
+
+    - name: Run test
+      run: ./test_runner
