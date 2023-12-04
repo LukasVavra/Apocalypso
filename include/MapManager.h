@@ -10,7 +10,8 @@ class MapManager : public Singleton<MapManager>
         void init();
         void render();
         void set_camera(Camera *camera);
-        
+        Camera* get_camera();
+        void update_render_bounds(int& imin, int& jmin, int& imax, int&jmax);
     private:
         uint8_t map[16][16] = {
             {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
