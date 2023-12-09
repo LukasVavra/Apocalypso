@@ -1,6 +1,7 @@
 #include <MotionSystem.h>
 #include <PositionSystem.h>
 #include <RenderSystem.h>
+#include <CollisionSystem.h>
 #include <Vecmath.h>
 
 #include <iostream>
@@ -36,14 +37,23 @@ void MotionSystem::update()
         auto dir = pod.target - pos->pos;
         auto distance = Vecmath::size(dir);
         // Check end of motion
-        if (distance < 1)
+        if (distance < pod.speed)
         {
             ctnr.erase(p.first);
             break;
         }
         else
         {
-            PositionSystem::instance().set_position(pod.id, pos->pos + pod.step, pos->level);
+            // Check collision
+            if(CollisionSystem::instance().update(pod.id, pos->pos + pod.step))
+            {
+                PositionSystem::instance().set_position(pod.id, pos->pos + pod.step, pos->level);
+            }
+            else
+            {
+                ctnr.erase(p.first);
+                break;
+            }
         }
     }
 }

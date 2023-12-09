@@ -4,6 +4,7 @@
 #include <PositionSystem.h>
 #include <MotionSystem.h>
 #include <RenderSystem.h>
+#include <CollisionSystem.h>
 #include <TextureManager.h>
 #include <SDL2/SDL.h>
 
@@ -51,6 +52,11 @@ void ObjectManager::loadObjects(const char *filepath)
                     return;
                 }
                 RenderSystem::instance().set_position(id, pos_pod->pos.x, pos_pod->pos.y, pos_pod->level);
+            }
+            if(obj.containsKey("collision"))
+            {
+                auto coll = obj["collision"];
+                CollisionSystem::instance().add(id, coll["xoffs"], coll["yoffs"], coll["width"], coll["height"], coll["barrier"]);
             }
         }
     }
