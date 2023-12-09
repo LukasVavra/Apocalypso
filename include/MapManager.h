@@ -12,6 +12,9 @@ class MapManager : public Singleton<MapManager>
         void set_camera(Camera *camera);
         Camera* get_camera();
         void update_render_bounds(int& imin, int& jmin, int& imax, int&jmax);
+
+        static int MAP_WIDTH;
+        static int MAP_HEIGHT;
     private:
         uint8_t map[16][16] = {
             {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},

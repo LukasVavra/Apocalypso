@@ -31,7 +31,7 @@ static bool running;
  * Frame rate management
  */
 const int FPS = 60;
-const int FRAME_DELAY = 1000 / 60;
+const int FRAME_DELAY = (1000 / 60) + 1;
 uint32_t frame_begin_time;
 int frame_time;
 
@@ -51,6 +51,17 @@ void init()
      */
     window = SDL_CreateWindow("Apocalypso v.1", 0, 0, 800, 600, SDL_WINDOW_RESIZABLE); // SDL_WINDOW_FULLSCREEN);
     assert(window && "WINDOW INIT");
+
+    /*
+     * Create SDL Renderer
+     */
+    renderer = SDL_CreateRenderer(window, -1, 0);
+    RenderSystem::renderer = renderer;
+    assert(renderer && RenderSystem::renderer && "RENDERER INIT");
+
+    /*
+     * Set camera
+     */
     camera.resize(SDL_GetWindowSurface(window)->w, SDL_GetWindowSurface(window)->h);
     camera.set_map_size(1000, 1000);
     rendersys.set_camera(&camera);
@@ -58,16 +69,14 @@ void init()
     mapman.set_camera(&camera);
 
     /*
-     * Create SDL Renderer
-     */
-    renderer = SDL_CreateRenderer(window, -1, 0);
-    RenderSystem::renderer = renderer;
-    assert(renderer && "RENDERER INIT");
-
-    /*
      * Create map
      */
     mapman.init();
+
+    /*
+     * Load objects
+     */
+    ObjectManager::instance().loadObjects("json/objects.json");
 
     /*
      * Start loop
@@ -139,7 +148,6 @@ void clean()
 int main()
 {
     init();
-    ObjectManager::instance().loadObjects("json/objects.json");
     while (running)
     {
         frame_begin_time = SDL_GetTicks();
@@ -154,8 +162,6 @@ int main()
             SDL_Delay(FRAME_DELAY - frame_time);
         }
     }
-
     clean();
-
     return 0;
 }

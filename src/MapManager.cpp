@@ -1,6 +1,10 @@
 #include "MapManager.h"
 #include <TextureManager.h>
 #include <RenderSystem.h>
+#include <algorithm>
+
+int MapManager::MAP_WIDTH = 16;
+int MapManager::MAP_HEIGHT = 16;
 
 void MapManager::init()
 {
@@ -42,6 +46,6 @@ void MapManager::update_render_bounds(int &imin, int &jmin, int &imax, int &jmax
     if(!camera) return;
     imin = camera->view().x / 64;
     jmin = camera->view().y / 64;
-    imax = ((camera->view().x + camera->view().w) / 64) + 1;
-    jmax = ((camera->view().y + camera->view().h) / 64) + 1;
+    imax = std::min(((camera->view().x + camera->view().w) / 64) + 1, MapManager::MAP_WIDTH);
+    jmax = std::min(((camera->view().y + camera->view().h) / 64) + 1, MapManager::MAP_HEIGHT);
 }
