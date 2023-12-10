@@ -15,6 +15,11 @@ void CollisionSystem::add(long unsigned id, int xoffs, int yoffs, int width, int
     cntr.add(id, xoffs, yoffs, rect, barrier);
 }
 
+void CollisionSystem::add(long unsigned id, int xoffs, int yoffs, SDL_Rect rect, bool barrier)
+{
+    cntr.add(id, xoffs, yoffs, rect, barrier);
+}
+
 CollisionSystem::CollisionPOD *CollisionSystem::get(long unsigned id)
 {
     return cntr.get(id);

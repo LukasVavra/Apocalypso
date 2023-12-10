@@ -2,11 +2,13 @@
 #include <Camera.h>
 #include <Singleton.h>
 #include <SDL2/SDL.h>
+#include <ArduinoJson-v6.19.4.h>
 #include <cstdint>
 
 class MapManager : public Singleton<MapManager>
 {
     public:
+        ~MapManager();
         void init();
         void render();
         void set_camera(Camera *camera);
@@ -34,11 +36,18 @@ class MapManager : public Singleton<MapManager>
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
         };
+        struct CollisionRect
+        {
+            int xoffs, yoffs;
+            int width, height;
+            bool barrier;
+        };
         struct MapTile
         {
             SDL_Texture* tex;
             SDL_Rect src;
+            CollisionRect coll;
         };
-        MapTile tile[10];
+        MapTile tile[64];
         Camera* camera = nullptr;
 };
