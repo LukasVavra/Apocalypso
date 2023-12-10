@@ -2,7 +2,6 @@
 #include <Camera.h>
 #include <Singleton.h>
 #include <SDL2/SDL.h>
-#include <ArduinoJson-v6.19.4.h>
 #include <cstdint>
 
 class MapManager : public Singleton<MapManager>
@@ -18,6 +17,7 @@ class MapManager : public Singleton<MapManager>
         static int MAP_WIDTH;
         static int MAP_HEIGHT;
     private:
+        bool load_map_tiles();
         uint8_t map[16][16] = {
             {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
