@@ -10,9 +10,5 @@ class ObjectManager : public Singleton<ObjectManager>
             static int unique_id_counter;
             return ++unique_id_counter;
         }
-        static bool loadJson(const char* filepath);
         void loadObjects(const char* filepath);
-
-    private:
-        inline static StaticJsonDocument<2048> json;    
 };

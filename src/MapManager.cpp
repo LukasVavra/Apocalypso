@@ -7,20 +7,15 @@
 #include <fstream>
 #include <iostream>
 #include <ArduinoJson-v6.19.4.h>
+#include <JsonReader.h>
 
 int MapManager::MAP_WIDTH = 16;
 int MapManager::MAP_HEIGHT = 16;
 
 void MapManager::init()
 {
-    //  create map tiles
-    if(!load_map_tiles())
-    {
-        auto tex = TextureManager::instance().load_texture("texture/map-tiles.png");
-        tile[0] = {tex, {0, 0, 64, 64}, {32, 32, 64, 64, false}};
-        tile[1] = {tex, {0, 64, 64, 64}, {32, 32, 64, 64, true}};
-        tile[2] = {tex, {0, 128, 64, 64}, {32, 32, 64, 64, true}};
-    }
+    load_map_tiles();
+    load_map();
     // create collision areas
     for(int i = 0; i < MapManager::MAP_WIDTH; ++i)
         for(int j = 0; j < MapManager::MAP_HEIGHT; ++j)
@@ -74,19 +69,7 @@ void MapManager::update_render_bounds(int &imin, int &jmin, int &imax, int &jmax
 bool MapManager::load_map_tiles()
 {   
     StaticJsonDocument<2048> json;
-    std::ifstream file("json/maptiles.json");
-    if(!file.is_open())
-    {
-        std::cout << "Error opening maptiles.json\n";
-        return false;
-    }
-    DeserializationError err = deserializeJson(json, file);
-    if(err)
-    {
-        std::cout << "Error parsing json: " << err.c_str() << "\n";
-        return false;
-    }
-    file.close();
+    if(!load_json(json, "json/maptiles.json")) return false;
 
     if(json.is<JsonArray>())
     {
@@ -110,4 +93,46 @@ bool MapManager::load_map_tiles()
     return true;
 }
 
-MapManager::~MapManager() {}
+bool MapManager::load_map()
+{
+    // read json
+    DynamicJsonDocument json(65535);
+    if(!load_json(json, "json/map.json")) return false;
+    
+    // get map layer
+    auto layer = json["layers"][0];
+    MapManager::MAP_WIDTH = layer["width"].as<int>();
+    MapManager::MAP_HEIGHT = layer["height"].as<int>();
+    
+    // allocate map
+    map = new uint8_t*[MapManager::MAP_WIDTH];
+    for(int i = 0; i < MapManager::MAP_WIDTH; ++i)
+    {
+        map[i] = new uint8_t[MapManager::MAP_HEIGHT];
+    }
+
+    // fill map
+    auto data = layer["data"].as<JsonArray>();
+    for(int i = 0; i < MapManager::MAP_WIDTH; ++i)
+        for(int j = 0; j < MapManager::MAP_HEIGHT; ++j)
+        {
+            std::cout << "map tile: " << i << ":" << j << " is " << (data[i + j].as<int>()) - 1 << "\n";        
+            map[i][j] = (data[(i * MapManager::MAP_WIDTH) + j].as<int>()) - 1;
+        }
+
+    std::cout << "map width: " << MapManager::MAP_WIDTH << ", map height: " << MapManager::MAP_HEIGHT << "\n";
+    std::cout << "map.json loaded successfully\n";
+    return true;
+}
+
+MapManager::~MapManager() 
+{
+    if(map) 
+    {
+        for(int i = 0; i < MapManager::MAP_WIDTH; ++i)
+        {
+            delete[] map[i];
+        }   
+        delete[] map;
+    }
+}

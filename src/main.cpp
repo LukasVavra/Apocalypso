@@ -60,18 +60,18 @@ void init()
     assert(renderer && RenderSystem::renderer && "RENDERER INIT");
 
     /*
-     * Set camera
-     */
-    camera.resize(SDL_GetWindowSurface(window)->w, SDL_GetWindowSurface(window)->h);
-    camera.set_map_size(1000, 1000);
-    rendersys.set_camera(&camera);
-    mouseman.set_camera(&camera);
-    mapman.set_camera(&camera);
-
-    /*
      * Create map
      */
     mapman.init();
+
+    /*
+     * Set camera
+     */
+    camera.resize(SDL_GetWindowSurface(window)->w, SDL_GetWindowSurface(window)->h);
+    camera.set_map_size(MapManager::MAP_WIDTH * 64, MapManager::MAP_HEIGHT * 64);
+    rendersys.set_camera(&camera);
+    mouseman.set_camera(&camera);
+    mapman.set_camera(&camera);
 
     /*
      * Load objects

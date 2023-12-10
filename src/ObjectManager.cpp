@@ -7,12 +7,14 @@
 #include <CollisionSystem.h>
 #include <TextureManager.h>
 #include <SDL2/SDL.h>
+#include <JsonReader.h>
 
 using namespace std;
 
 void ObjectManager::loadObjects(const char *filepath)
 {
-    if(!ObjectManager::loadJson(filepath)) return;
+    StaticJsonDocument<2048> json;    
+    if(!load_json(json, filepath)) return;
     if(json.is<JsonArray>())
     {
         for (JsonVariant obj : json.as<JsonArray>())
@@ -64,22 +66,4 @@ void ObjectManager::loadObjects(const char *filepath)
     {
         cout << "Json not array!\n";
     }
-}
-
-bool ObjectManager::loadJson(const char *filepath)
-{
-    ifstream file(filepath);
-    if(!file.is_open())
-    {
-        cout << "Error opening file " << filepath << "\n";
-        return false;
-    }
-    DeserializationError err = deserializeJson(ObjectManager::json, file);
-    if(err)
-    {
-        cout << "Error parsing json: " << err.c_str() << "\n";
-        return false;
-    }
-    file.close();
-    return true;
 }
