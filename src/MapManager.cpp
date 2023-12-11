@@ -17,12 +17,12 @@ void MapManager::init()
     load_map_tiles();
     load_map();
     // create collision areas
-    for(int i = 0; i < MapManager::MAP_WIDTH; ++i)
-        for(int j = 0; j < MapManager::MAP_HEIGHT; ++j)
+    for(int i = 0; i < MapManager::MAP_HEIGHT; ++i)
+        for(int j = 0; j < MapManager::MAP_WIDTH; ++j)
         if(tile[map[i][j]].coll.barrier)
             {//          left up   mid   offs
-                int x = (i * 64) + 32 - tile[map[i][j]].coll.xoffs;
-                int y = (j * 64) + 32 - tile[map[i][j]].coll.yoffs;
+                int x = (j * 64) + 32 - tile[map[i][j]].coll.xoffs;
+                int y = (i * 64) + 32 - tile[map[i][j]].coll.yoffs;
                 int width = tile[map[i][j]].coll.width;
                 int height = tile[map[i][j]].coll.height;
                 SDL_Rect collrect{x, y, width, height};
@@ -38,12 +38,12 @@ void MapManager::render()
     int xmax = 16;
     int ymax = 16;
     update_render_bounds(x, y, xmax,  ymax); // render only visible tiles
-    for(int i = x; i < xmax; ++i)
-        for(int j = y; j < ymax; ++j)
+    for(int h = y; h < ymax; ++h)
+        for(int w = x; w < xmax; ++w)
         {
-            SDL_Rect dest{i * 64, j * 64, 64, 64};
+            SDL_Rect dest{w * 64, h * 64, 64, 64};
             if(camera) camera->update_render(dest);
-            SDL_RenderCopy(RenderSystem::renderer, tile[map[i][j]].tex, &tile[map[i][j]].src, &dest);
+            SDL_RenderCopy(RenderSystem::renderer, tile[map[h][w]].tex, &tile[map[h][w]].src, &dest);
         }
 }
 
@@ -105,19 +105,19 @@ bool MapManager::load_map()
     MapManager::MAP_HEIGHT = layer["height"].as<int>();
     
     // allocate map
-    map = new uint8_t*[MapManager::MAP_WIDTH];
-    for(int i = 0; i < MapManager::MAP_WIDTH; ++i)
+    map = new uint8_t*[MapManager::MAP_HEIGHT];
+    for(int i = 0; i < MapManager::MAP_HEIGHT; ++i)
     {
-        map[i] = new uint8_t[MapManager::MAP_HEIGHT];
+        map[i] = new uint8_t[MapManager::MAP_WIDTH];
     }
 
     // fill map
     auto data = layer["data"].as<JsonArray>();
-    for(int i = 0; i < MapManager::MAP_WIDTH; ++i)
-        for(int j = 0; j < MapManager::MAP_HEIGHT; ++j)
+    int index = 0;
+    for(int i = 0; i < MapManager::MAP_HEIGHT; ++i)
+        for(int j = 0; j < MapManager::MAP_WIDTH; ++j)
         {
-            std::cout << "map tile: " << i << ":" << j << " is " << (data[i + j].as<int>()) - 1 << "\n";        
-            map[i][j] = (data[(i * MapManager::MAP_WIDTH) + j].as<int>()) - 1;
+            map[i][j] = (data[index++].as<int>()) - 1;
         }
 
     std::cout << "map width: " << MapManager::MAP_WIDTH << ", map height: " << MapManager::MAP_HEIGHT << "\n";
@@ -129,7 +129,7 @@ MapManager::~MapManager()
 {
     if(map) 
     {
-        for(int i = 0; i < MapManager::MAP_WIDTH; ++i)
+        for(int i = 0; i < MapManager::MAP_HEIGHT; ++i)
         {
             delete[] map[i];
         }   
