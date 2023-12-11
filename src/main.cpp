@@ -5,6 +5,7 @@
 #include <MouseManager.h>
 #include <ObjectManager.h>
 #include <MapManager.h>
+#include <KeypadManager.h>
 #include <SDL2/SDL.h>
 #include <assert.h>
 #include <iostream>
@@ -24,6 +25,8 @@ Camera camera;
 #define motionsys   MotionSystem::instance()
 #define mouseman    MouseManager::instance()
 #define mapman      MapManager::instance()
+#define objman      ObjectManager::instance()
+#define keyman      KeypadManager::instance()
 
 static bool running;
 
@@ -34,6 +37,43 @@ const int FPS = 60;
 const int FRAME_DELAY = (1000 / 60) + 1;
 uint32_t frame_begin_time;
 int frame_time;
+
+void handle_events()
+{
+    SDL_Event event;
+    if (SDL_PollEvent(&event))
+    {
+        if (event.type == SDL_QUIT)
+        {
+            running = false;
+        }
+        if (event.type == SDL_KEYDOWN)
+        {
+            keyman.key_down(event.key.keysym);
+        }
+        else if (event.type == SDL_KEYUP)
+        {
+            keyman.key_up(event.key.keysym);
+        }
+        if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED)
+        {
+            camera.resize(SDL_GetWindowSurface(window)->w, SDL_GetWindowSurface(window)->h);
+        }
+        if (event.type == SDL_MOUSEBUTTONDOWN)
+        {
+            int x, y;
+            SDL_GetMouseState(&x, &y);
+            if(event.button.button == SDL_BUTTON_LEFT)
+            {
+                mouseman.left_btn(x, y);
+            }
+            else 
+            {
+                mouseman.right_btn(x, y);
+            }
+        }
+    }
+}
 
 void init()
 {
@@ -76,51 +116,12 @@ void init()
     /*
      * Load objects
      */
-    ObjectManager::instance().loadObjects("json/objects.json");
+    objman.loadObjects("json/objects.json");
 
     /*
      * Start loop
      */
     running = true;
-}
-
-void handle_events()
-{
-    SDL_Event event;
-    if (SDL_PollEvent(&event))
-    {
-        if (event.type == SDL_QUIT)
-        {
-            running = false;
-        }
-        if (event.type == SDL_KEYDOWN)
-        {
-            switch (event.key.keysym.sym)
-            {
-            case SDLK_w:
-                break;
-            default:
-                break;
-            }
-        }
-        if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED)
-        {
-            camera.resize(SDL_GetWindowSurface(window)->w, SDL_GetWindowSurface(window)->h);
-        }
-        if (event.type == SDL_MOUSEBUTTONDOWN)
-        {
-            int x, y;
-            SDL_GetMouseState(&x, &y);
-            if(event.button.button == SDL_BUTTON_LEFT)
-            {
-                mouseman.left_btn(x, y);
-            }
-            else 
-            {
-                mouseman.right_btn(x, y);
-            }
-        }
-    }
 }
 
 void update()
