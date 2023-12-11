@@ -1,22 +1,8 @@
-/*
- * Camera.cpp
- *
- *  Created on: 27. 11. 2022
- *      Author: lucco
- */
-
 #include <Camera.h>
+#include <KeypadManager.h>
 
-#include <PositionSystem.h>
-
-Camera::Camera() :
-		point(0, 0), mw(0), mh(0)
-{
-	_view.x = 0;
-	_view.y = 0;
-	_view.w = 0;
-	_view.h = 0;
-}
+Camera::Camera() : _view{0, 0, 0, 0}, mw(0), mh(0), pospod_eye(nullptr)
+{}
 
 void Camera::update_viewpoint(Vec* point)
 {
@@ -74,13 +60,45 @@ void Camera::update_render(SDL_Rect &des)
 
 void Camera::watch_id(long unsigned id)
 {
-	id_eye = id;
+	pospod_eye = PositionSystem::instance().get(id);
+}
+
+void Camera::unwatch()
+{
+	if(pospod_eye)
+	{
+		pospod_eye = nullptr;
+	}
 }
 
 void Camera::update()
 {
-	if(id_eye)
+	if(pospod_eye)
 	{
-		update_viewpoint(&PositionSystem::instance().get(id_eye)->pos);
+		update_viewpoint(&pospod_eye->pos);
 	}
+}
+
+void Camera::move_up()
+{
+	unwatch();
+	_view.y = _view.y < move_step ? 0 : _view.y - move_step;
+}
+
+void Camera::move_down()
+{
+	unwatch();
+	_view.y += move_step;
+}
+
+void Camera::move_left()
+{
+	unwatch();
+	_view.x = _view.x < move_step ? 0 : _view.x - move_step;
+}
+
+void Camera::move_right()
+{
+	unwatch();
+	_view.x += move_step;
 }
