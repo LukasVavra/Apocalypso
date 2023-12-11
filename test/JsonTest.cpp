@@ -1,8 +1,14 @@
 #include <gtest/gtest.h>
 
-#include <ObjectManager.h>
+#include <JsonReader.h>
 
 TEST(JsonTest, LoadJson)
 {
-    EXPECT_TRUE(ObjectManager::loadJson("json/objects.json"));
+    DynamicJsonDocument json(65535);
+    EXPECT_TRUE(load_json(json ,"json/objects.json"));
+    json.clear();
+    EXPECT_TRUE(load_json(json ,"json/maptiles.json"));
+    json.clear();
+    EXPECT_TRUE(load_json(json ,"json/map.json"));
+    json.clear();
 }
