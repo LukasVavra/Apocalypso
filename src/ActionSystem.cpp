@@ -33,7 +33,7 @@ bool ActionSystem::remove_op(long unsigned id, ActionId op)
 bool ActionSystem::trigger_action(long unsigned id, ActionId op)
 {
     ActionPOD* actor = cntr.get(id);
-    if(!actor) return false;
+    if(!actor || !has_op(*actor, op)) return false;
     if(cache.count(id) > 0)
     {
         auto reactor = cache[id];
