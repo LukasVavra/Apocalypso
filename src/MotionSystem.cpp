@@ -2,6 +2,7 @@
 #include <PositionSystem.h>
 #include <RenderSystem.h>
 #include <CollisionSystem.h>
+#include <ActionSystem.h>
 #include <Vecmath.h>
 
 #include <iostream>
@@ -48,6 +49,7 @@ void MotionSystem::update()
             if(CollisionSystem::instance().update(pod.id, pos->pos + pod.step))
             {
                 PositionSystem::instance().set_position(pod.id, pos->pos + pod.step, pos->level);
+                ActionSystem::instance().update(pod.id, pos->pos + pod.step);
             }
             else
             {

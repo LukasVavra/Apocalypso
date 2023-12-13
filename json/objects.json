@@ -19,6 +19,14 @@
         "width" : 40,
         "height": 40,
         "barrier" : true
+    },
+    "action" : {
+        "xoffs" : 32,
+        "yoffs" : 32,
+        "width" : 64,
+        "height": 64,
+        "actor_op" : [1],
+        "reactor_op" : [1]
     }
 },
 {
@@ -43,5 +51,13 @@
         "width" : 40,
         "height": 40,
         "barrier" : true
+    },
+    "action" : {
+        "xoffs" : 32,
+        "yoffs" : 32,
+        "width" : 64,
+        "height": 64,
+        "actor_op" : [1],
+        "reactor_op" : [1]
     }
 }]
