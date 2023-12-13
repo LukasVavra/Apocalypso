@@ -1,13 +1,16 @@
 #include "ObjectManager.h"
-#include <fstream>
-#include <iostream>
 #include <PositionSystem.h>
 #include <MotionSystem.h>
 #include <RenderSystem.h>
 #include <CollisionSystem.h>
+#include <ActionSystem.h>
 #include <TextureManager.h>
-#include <SDL2/SDL.h>
 #include <JsonReader.h>
+#include <SDL2/SDL.h>
+#include <vector>
+#include <fstream>
+#include <iostream>
+
 
 using namespace std;
 
@@ -59,6 +62,20 @@ void ObjectManager::loadObjects(const char *filepath)
             {
                 auto coll = obj["collision"];
                 CollisionSystem::instance().add(id, coll["xoffs"], coll["yoffs"], coll["width"], coll["height"], coll["barrier"]);
+            }
+            if(obj.containsKey("action"))
+            {
+                auto action = obj["action"];
+                std::vector<OperationId> actor_op, reactor_op;
+                for(auto op : action["actor_op"].as<JsonArrayConst>())
+                {
+                    actor_op.push_back(op);
+                }
+                for(auto op : action["reactor_op"].as<JsonArrayConst>())
+                {
+                    reactor_op.push_back(op);
+                }
+                ActionSystem::instance().add(id, action["xoffs"], action["yoffs"], action["width"], action["height"], actor_op, reactor_op);
             }
         }
     }

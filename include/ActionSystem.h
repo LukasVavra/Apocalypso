@@ -6,23 +6,26 @@
 #include <Vec.h>
 #include <SDL2/SDL.h>
 #include <map>
+#include <vector>
 
 class ActionSystem : public Singleton<ActionSystem>
 {
 public:
-    static constexpr uint8_t OP_SIZE = 8;
     struct ActionPOD
     {
         long unsigned id;
         int xoffs, yoffs;
         SDL_Rect area;
-        OperationId actor_op[OP_SIZE];
-        OperationId reactor_op[OP_SIZE];
+        std::vector<OperationId> actor_op;
+        std::vector<OperationId> reactor_op;
     };
     using Cache = std::map<long unsigned, ActionPOD*>;
     bool assign_op(long unsigned id, OperationId op, bool actor);
     bool unassign_op(long unsigned id, OperationId op, bool actor);
     bool trigger_action(long unsigned id, OperationId op);
+    void add(long unsigned id, int xoffs, int yoffs, int width, int height, std::vector<OperationId>& actor_op, std::vector<OperationId>& reactor_op);
+    ActionPOD* get(long unsigned id);
+    void remove(long unsigned id);
     void update(long unsigned id, Vec point);
     
 private:

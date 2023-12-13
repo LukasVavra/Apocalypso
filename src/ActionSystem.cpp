@@ -1,33 +1,40 @@
 #include "ActionSystem.h"
+#include <PositionSystem.h>
 
 bool ActionSystem::assign_op(long unsigned id, OperationId op, bool actor)
 {
     ActionPOD* pod = cntr.get(id);
     if(!pod) return false;
-    for(int i = 0; i < OP_SIZE; ++i)
+    if(actor)
     {
-        if((actor ? pod->actor_op[i] : pod->reactor_op[i]) == 0)
-        {
-            (actor ? pod->actor_op[i] : pod->reactor_op[i]) = op;
-            return true;
-        }
+        pod->actor_op.push_back(op);
     }
-    return false;
+    else
+    {
+        pod->reactor_op.push_back(op);
+    }
+    return true;
 }
 
 bool ActionSystem::unassign_op(long unsigned id, OperationId op, bool actor)
 {
     ActionPOD* pod = cntr.get(id);
     if(!pod) return false;
-    for(int i = 0; i < OP_SIZE; ++i)
+    if(actor)
     {
-        if((actor ? pod->actor_op[i] : pod->reactor_op[i]) == op)
+        for(auto it = pod->actor_op.begin(); it != pod->actor_op.end(); it++)
         {
-            (actor ? pod->actor_op[i] : pod->reactor_op[i]) = 0;
-            return true;
+            if(*it == op) pod->actor_op.erase(it);
         }
     }
-    return false;
+    else
+    {
+        for(auto it = pod->reactor_op.begin(); it != pod->reactor_op.end(); it++)
+        {
+            if(*it == op) pod->reactor_op.erase(it);
+        }
+    }
+    return true;
 }
 
 bool ActionSystem::trigger_action(long unsigned id, OperationId op)
@@ -48,6 +55,29 @@ bool ActionSystem::trigger_action(long unsigned id, OperationId op)
     auto reactor = find_action(*actor, op);
     if(!reactor) return false;
     return OperationManager::instance().run_op(id, reactor->id, op);
+}
+
+void ActionSystem::add(long unsigned id, int xoffs, int yoffs, int width, int height, std::vector<OperationId>& actor_op, std::vector<OperationId>& reactor_op)
+{
+    SDL_Rect area {0, 0, width, height};
+    // Search for id in PositionSystem
+    auto pospod = PositionSystem::instance().get(id);
+    if(pospod)
+    {
+        area.x = pospod->pos.x - xoffs;
+        area.y = pospod->pos.y - yoffs;
+    }
+    cntr.add(id, xoffs, yoffs, area, actor_op, reactor_op);
+}
+
+ActionSystem::ActionPOD *ActionSystem::get(long unsigned id)
+{
+    return cntr.get(id);
+}
+
+void ActionSystem::remove(long unsigned id)
+{
+    cntr.remove(id);
 }
 
 void ActionSystem::update(long unsigned id, Vec point)
@@ -72,9 +102,19 @@ ActionSystem::ActionPOD *ActionSystem::find_action(ActionPOD& actor, OperationId
 
 bool ActionSystem::has_op(ActionPOD& pod, OperationId op, bool actor)
 {
-    for(int i = 0; i < OP_SIZE; ++i)
+    if(actor)
     {
-        if((actor ? pod.actor_op[i] : pod.reactor_op[i]) == op) return true;
+        for(auto& o : pod.actor_op)
+        {
+            if(o == op) return true;
+        }
+    }
+    else
+    {
+        for(auto& o : pod.reactor_op)
+        {
+            if(o == op) return true;
+        }
     }
     return false;
 }
