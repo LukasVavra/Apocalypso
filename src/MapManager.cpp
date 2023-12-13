@@ -11,6 +11,8 @@
 
 int MapManager::MAP_WIDTH = 16;
 int MapManager::MAP_HEIGHT = 16;
+int MapManager::TILE_WIDTH = 64;
+int MapManager::TILE_HEIGHT = 64;
 
 void MapManager::init()
 {
@@ -21,8 +23,8 @@ void MapManager::init()
         for(int j = 0; j < MapManager::MAP_WIDTH; ++j)
         if(tile[map[i][j]].coll.barrier)
             {//          left up   mid   offs
-                int x = (j * 64) + 32 - tile[map[i][j]].coll.xoffs;
-                int y = (i * 64) + 32 - tile[map[i][j]].coll.yoffs;
+                int x = (j * TILE_WIDTH) + (TILE_WIDTH / 2) - tile[map[i][j]].coll.xoffs;
+                int y = (i * TILE_HEIGHT) + (TILE_HEIGHT / 2) - tile[map[i][j]].coll.yoffs;
                 int width = tile[map[i][j]].coll.width;
                 int height = tile[map[i][j]].coll.height;
                 SDL_Rect collrect{x, y, width, height};
@@ -41,7 +43,7 @@ void MapManager::render()
     for(int h = y; h < ymax; ++h)
         for(int w = x; w < xmax; ++w)
         {
-            SDL_Rect dest{w * 64, h * 64, 64, 64};
+            SDL_Rect dest{w * TILE_WIDTH, h * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT};
             if(camera) camera->update_render(dest);
             SDL_RenderCopy(RenderSystem::renderer, tile[map[h][w]].tex, &tile[map[h][w]].src, &dest);
         }
@@ -60,10 +62,10 @@ Camera *MapManager::get_camera()
 void MapManager::update_render_bounds(int &imin, int &jmin, int &imax, int &jmax)
 {
     if(!camera) return;
-    imin = camera->view().x / 64;
-    jmin = camera->view().y / 64;
-    imax = std::min(((camera->view().x + camera->view().w) / 64) + 1, MapManager::MAP_WIDTH);
-    jmax = std::min(((camera->view().y + camera->view().h) / 64) + 1, MapManager::MAP_HEIGHT);
+    imin = camera->view().x / TILE_WIDTH;
+    jmin = camera->view().y / TILE_HEIGHT;
+    imax = std::min(((camera->view().x + camera->view().w) / TILE_WIDTH) + 1, MapManager::MAP_WIDTH);
+    jmax = std::min(((camera->view().y + camera->view().h) / TILE_HEIGHT) + 1, MapManager::MAP_HEIGHT);
 }
 
 bool MapManager::load_map_tiles()

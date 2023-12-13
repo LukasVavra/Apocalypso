@@ -88,7 +88,7 @@ void Camera::move_up()
 void Camera::move_down()
 {
 	unwatch();
-	_view.y += move_step;
+	_view.y = (mh - (_view.y + _view.h)) < move_step ? (mh - _view.h) : _view.y + move_step;
 }
 
 void Camera::move_left()
@@ -100,5 +100,5 @@ void Camera::move_left()
 void Camera::move_right()
 {
 	unwatch();
-	_view.x += move_step;
+	_view.x = (mw - (_view.x + _view.w)) < move_step ? (mw - _view.w) : _view.x + move_step;
 }
