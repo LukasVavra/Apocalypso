@@ -16,6 +16,8 @@ class MapManager : public Singleton<MapManager>
 
         static int MAP_WIDTH;
         static int MAP_HEIGHT;
+        static int TILE_WIDTH;
+        static int TILE_HEIGHT;
     private:
         bool load_map_tiles();
         bool load_map();
