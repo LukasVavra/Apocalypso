@@ -1,6 +1,6 @@
 #include "ActionSystem.h"
 
-bool ActionSystem::add_op(long unsigned id, ActionId op)
+bool ActionSystem::assign_op(long unsigned id, OperationId op)
 {
     ActionPOD* pod = cntr.get(id);
     if(!pod) return false;
@@ -15,7 +15,7 @@ bool ActionSystem::add_op(long unsigned id, ActionId op)
     return false;
 }
 
-bool ActionSystem::remove_op(long unsigned id, ActionId op)
+bool ActionSystem::unassign_op(long unsigned id, OperationId op)
 {
     ActionPOD* pod = cntr.get(id);
     if(!pod) return false;
@@ -30,7 +30,7 @@ bool ActionSystem::remove_op(long unsigned id, ActionId op)
     return false;
 }
 
-bool ActionSystem::trigger_action(long unsigned id, ActionId op)
+bool ActionSystem::trigger_action(long unsigned id, OperationId op)
 {
     ActionPOD* actor = cntr.get(id);
     if(!actor || !has_op(*actor, op)) return false;
@@ -39,8 +39,7 @@ bool ActionSystem::trigger_action(long unsigned id, ActionId op)
         auto reactor = cache[id];
         if(SDL_HasIntersection(&actor->area, &reactor->area))
         {
-            //return call_op (actor, reactor, op);
-            return true;
+            return OperationManager::instance().run_op(id, reactor->id, op);
         }
         // cache entry is not valid, remove it
         cache.erase(id);
@@ -48,8 +47,7 @@ bool ActionSystem::trigger_action(long unsigned id, ActionId op)
     // id entry not in cache, search for action
     auto reactor = find_action(*actor, op);
     if(!reactor) return false;
-    //return call_op (actor, reactor, op);
-    return true;
+    return OperationManager::instance().run_op(id, reactor->id, op);
 }
 
 void ActionSystem::update(long unsigned id, Vec point)
@@ -60,7 +58,7 @@ void ActionSystem::update(long unsigned id, Vec point)
     pod->area.y = point.y - pod->yoffs;
 }
 
-ActionSystem::ActionPOD *ActionSystem::find_action(ActionPOD& actor, ActionId op)
+ActionSystem::ActionPOD *ActionSystem::find_action(ActionPOD& actor, OperationId op)
 {
     for(auto& reactor : cntr)
     {
@@ -72,9 +70,9 @@ ActionSystem::ActionPOD *ActionSystem::find_action(ActionPOD& actor, ActionId op
     return nullptr;
 }
 
-bool ActionSystem::has_op(ActionPOD& pod, ActionId op)
+bool ActionSystem::has_op(ActionPOD& pod, OperationId op)
 {
-    for(int i = 0; i < 8; ++i)
+    for(int i = 0; i < OP_SIZE; ++i)
     {
         if(pod.op[i] == op) return true;
     }
