@@ -1,29 +1,29 @@
 #include "ActionSystem.h"
 
-bool ActionSystem::assign_op(long unsigned id, OperationId op)
+bool ActionSystem::assign_op(long unsigned id, OperationId op, bool actor)
 {
     ActionPOD* pod = cntr.get(id);
     if(!pod) return false;
     for(int i = 0; i < OP_SIZE; ++i)
     {
-        if(pod->op[i] == 0)
+        if((actor ? pod->actor_op[i] : pod->reactor_op[i]) == 0)
         {
-            pod->op[i] = op;
+            (actor ? pod->actor_op[i] : pod->reactor_op[i]) = op;
             return true;
         }
     }
     return false;
 }
 
-bool ActionSystem::unassign_op(long unsigned id, OperationId op)
+bool ActionSystem::unassign_op(long unsigned id, OperationId op, bool actor)
 {
     ActionPOD* pod = cntr.get(id);
     if(!pod) return false;
     for(int i = 0; i < OP_SIZE; ++i)
     {
-        if(pod->op[i] == op)
+        if((actor ? pod->actor_op[i] : pod->reactor_op[i]) == op)
         {
-            pod->op[i] = 0;
+            (actor ? pod->actor_op[i] : pod->reactor_op[i]) = 0;
             return true;
         }
     }
@@ -33,7 +33,7 @@ bool ActionSystem::unassign_op(long unsigned id, OperationId op)
 bool ActionSystem::trigger_action(long unsigned id, OperationId op)
 {
     ActionPOD* actor = cntr.get(id);
-    if(!actor || !has_op(*actor, op)) return false;
+    if(!actor || !has_op(*actor, op, true)) return false;
     if(cache.count(id) > 0)
     {
         auto reactor = cache[id];
@@ -62,7 +62,7 @@ ActionSystem::ActionPOD *ActionSystem::find_action(ActionPOD& actor, OperationId
 {
     for(auto& reactor : cntr)
     {
-        if(SDL_HasIntersection(&actor.area, &reactor.area) && has_op(reactor, op))
+        if(SDL_HasIntersection(&actor.area, &reactor.area) && has_op(reactor, op, false))
         {
             return &reactor;
         }
@@ -70,11 +70,11 @@ ActionSystem::ActionPOD *ActionSystem::find_action(ActionPOD& actor, OperationId
     return nullptr;
 }
 
-bool ActionSystem::has_op(ActionPOD& pod, OperationId op)
+bool ActionSystem::has_op(ActionPOD& pod, OperationId op, bool actor)
 {
     for(int i = 0; i < OP_SIZE; ++i)
     {
-        if(pod.op[i] == op) return true;
+        if((actor ? pod.actor_op[i] : pod.reactor_op[i]) == op) return true;
     }
     return false;
 }
