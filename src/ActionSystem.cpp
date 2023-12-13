@@ -1,5 +1,6 @@
 #include "ActionSystem.h"
 #include <PositionSystem.h>
+#include <algorithm>
 
 bool ActionSystem::assign_op(long unsigned id, OperationId op, bool actor)
 {
@@ -20,20 +21,8 @@ bool ActionSystem::unassign_op(long unsigned id, OperationId op, bool actor)
 {
     ActionPOD* pod = cntr.get(id);
     if(!pod) return false;
-    if(actor)
-    {
-        for(auto it = pod->actor_op.begin(); it != pod->actor_op.end(); it++)
-        {
-            if(*it == op) pod->actor_op.erase(it);
-        }
-    }
-    else
-    {
-        for(auto it = pod->reactor_op.begin(); it != pod->reactor_op.end(); it++)
-        {
-            if(*it == op) pod->reactor_op.erase(it);
-        }
-    }
+    auto& vec = actor ? pod->actor_op : pod->reactor_op;
+    vec.erase(std::remove(vec.begin(), vec.end(), op), vec.end());
     return true;
 }
 
@@ -54,6 +43,7 @@ bool ActionSystem::trigger_action(long unsigned id, OperationId op)
     // id entry not in cache, search for action
     auto reactor = find_action(*actor, op);
     if(!reactor) return false;
+    cache[id] = reactor;
     return OperationManager::instance().run_op(id, reactor->id, op);
 }
 
@@ -92,6 +82,7 @@ ActionSystem::ActionPOD *ActionSystem::find_action(ActionPOD& actor, OperationId
 {
     for(auto& reactor : cntr)
     {
+        if(actor.id == reactor.id) continue;
         if(SDL_HasIntersection(&actor.area, &reactor.area) && has_op(reactor, op, false))
         {
             return &reactor;

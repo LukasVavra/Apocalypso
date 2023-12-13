@@ -1,6 +1,5 @@
 #include "CollisionSystem.h"
 #include <PositionSystem.h>
-#include <iostream>
 
 void CollisionSystem::add(long unsigned id, int xoffs, int yoffs, int width, int height, bool barrier)
 {
@@ -40,11 +39,7 @@ bool CollisionSystem::update(long unsigned id, Vec position)
         for(auto& pod : cntr)
         {
             if(pod.id == id || !pod.barrier) continue;
-            if(SDL_HasIntersection(&newrect, &pod.rect))
-            {
-                std::cout << "Collision between " << id << " and " << pod.id <<"\n";
-                return false;
-            }
+            if(SDL_HasIntersection(&newrect, &pod.rect)) return false;
         }
     }
     collpod->rect.x = newrect.x;
