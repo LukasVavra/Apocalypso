@@ -79,33 +79,11 @@ void Camera::update()
 	}
 }
 
-void Camera::key_down(SDL_Keysym &key)
+Vec Camera::get_map_position(int &x, int &y)
 {
-	unwatch();
-	switch(key.sym)
-	{
-		case SDLK_UP:
-			move_up();
-		break;
-
-		case SDLK_DOWN:
-			move_down();
-		break;
-
-		case SDLK_LEFT:
-			move_left();
-		break;
-
-		case SDLK_RIGHT:
-			move_right();
-		break;
-		default:
-		break;
-	}
-}
-
-void Camera::key_up(SDL_Keysym &key)
-{
+    int cx = x + _view.x;
+	int cy = y + _view.y;
+    return Vec(cx, cy);
 }
 
 void Camera::move_up()

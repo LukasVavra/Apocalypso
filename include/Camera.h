@@ -5,7 +5,7 @@
 #include <SDL2/SDL.h>
 #include <KeypadManager.h>
 
-class Camera : public KeypadObserver
+class Camera
 {
 public:
 	Camera();
@@ -17,16 +17,15 @@ public:
 	void watch_id(long unsigned id);
 	void unwatch();
 	void update();
-	virtual void key_down(SDL_Keysym &key) override;
-	virtual void key_up(SDL_Keysym &key) override;
-	
-private:
+	Vec get_map_position(int &x, int &y);
 	void move_up();
 	void move_down();
 	void move_left();
 	void move_right();
-	SDL_Rect _view;
-	int mw, mh;
+	
+private:
+    SDL_Rect _view;
+    int mw, mh;
 	PositionSystem::PositionPOD* pospod_eye;
 	int move_step = 10;
 };

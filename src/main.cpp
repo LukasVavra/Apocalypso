@@ -1,6 +1,7 @@
 #include <RenderSystem.h>
 #include <PositionSystem.h>
 #include <ControllerSystem.h>
+#include <UiController.h>
 #include <TextureManager.h>
 #include <Camera.h>
 #include <MouseManager.h>
@@ -111,11 +112,14 @@ void init()
      */
     camera.resize(SDL_GetWindowSurface(window)->w, SDL_GetWindowSurface(window)->h);
     camera.set_map_size(MapManager::MAP_WIDTH * MapManager::TILE_WIDTH, MapManager::MAP_HEIGHT * MapManager::TILE_HEIGHT);
-    keyman.add_observer(&camera);
-
     rendersys.set_camera(&camera);
     mouseman.set_camera(&camera);
     mapman.set_camera(&camera);
+
+    /*
+     * Create Ui Controller
+     */
+    ctrlsys.create_controller<UiController>(&camera);
 
     /*
      * Load objects
