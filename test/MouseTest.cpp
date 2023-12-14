@@ -8,26 +8,24 @@ using namespace std;
 static int l_counter = 0;
 static int r_counter = 0;
 
-class TestObserver : public MouseObserver
-{
-public:
-    virtual void left_btn(int& x, int& y) override
-    {
-        cout << "TestObserver: left button called\n";
-        ++l_counter;
-    }
-    virtual void right_btn(int& x, int& y) override
-    {
-        cout << "TestObserver: right button called\n";
-        ++r_counter;
-    }
-    virtual ~TestObserver() = default;
-};
-
-TestObserver o;
-
 class MouseManagerTest : public testing::Test 
 {
+public:
+    class TestObserver : public MouseObserver
+    {
+    public:
+        virtual void left_btn(int& x, int& y) override
+        {
+            cout << "TestObserver: left button called\n";
+            ++l_counter;
+        }
+        virtual void right_btn(int& x, int& y) override
+        {
+            cout << "TestObserver: right button called\n";
+            ++r_counter;
+        }
+        virtual ~TestObserver() = default;
+    };
 protected:
     int x, y;
     void SetUp() override
@@ -36,6 +34,8 @@ protected:
         y = 0;
     }
 };
+
+static MouseManagerTest::TestObserver mouseobserver;
 
 TEST_F(MouseManagerTest, TestInitialization)
 {
@@ -47,7 +47,7 @@ TEST_F(MouseManagerTest, TestInitialization)
 
 TEST_F(MouseManagerTest, TestLeftClick)
 {
-    MouseManager::instance().add_observer(&o);
+    MouseManager::instance().add_observer(&mouseobserver);
     MouseManager::instance().left_btn(x, y);
     EXPECT_EQ(l_counter, 1);
     EXPECT_EQ(r_counter, 0);
