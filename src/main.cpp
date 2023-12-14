@@ -109,10 +109,7 @@ void init()
      */
     camera.resize(SDL_GetWindowSurface(window)->w, SDL_GetWindowSurface(window)->h);
     camera.set_map_size(MapManager::MAP_WIDTH * MapManager::TILE_WIDTH, MapManager::MAP_HEIGHT * MapManager::TILE_HEIGHT);
-   	keyman.register_action(SDLK_UP, [](){camera.move_up();});
-	keyman.register_action(SDLK_DOWN, [](){camera.move_down();});
-    keyman.register_action(SDLK_LEFT, [](){camera.move_left();});
-    keyman.register_action(SDLK_RIGHT, [](){camera.move_right();});
+    keyman.add_observer(&camera);
 
     rendersys.set_camera(&camera);
     mouseman.set_camera(&camera);

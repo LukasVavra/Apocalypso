@@ -1,18 +1,24 @@
 #pragma once
 #include <Singleton.h>
 #include <SDL2/SDL.h>
-#include <map>
-#include <functional>
+#include <vector>
 
-using callback = std::function<void()>;
+class KeypadObserver
+{
+public:
+    virtual void key_down(SDL_Keysym& key) = 0;
+    virtual void key_up(SDL_Keysym& key) = 0;
+    virtual ~KeypadObserver() = default;
+};
 
 class KeypadManager : public Singleton<KeypadManager>
 {
 public:
     void key_down(SDL_Keysym& key);
     void key_up(SDL_Keysym& key);
-    void register_action(int32_t keysym, callback f);
+    void add_observer(KeypadObserver* observer);
+    void remove_observer(KeypadObserver* observer);
 
 private:
-    std::map<int32_t, callback> action;
+    std::vector<KeypadObserver*> observers;
 };

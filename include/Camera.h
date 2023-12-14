@@ -3,8 +3,9 @@
 #include <PositionSystem.h>
 #include <Vec.h>
 #include <SDL2/SDL.h>
+#include <KeypadManager.h>
 
-class Camera
+class Camera : public KeypadObserver
 {
 public:
 	Camera();
@@ -16,12 +17,14 @@ public:
 	void watch_id(long unsigned id);
 	void unwatch();
 	void update();
+	virtual void key_down(SDL_Keysym &key) override;
+	virtual void key_up(SDL_Keysym &key) override;
+	
+private:
 	void move_up();
 	void move_down();
 	void move_left();
 	void move_right();
-
-private:
 	SDL_Rect _view;
 	int mw, mh;
 	PositionSystem::PositionPOD* pospod_eye;
