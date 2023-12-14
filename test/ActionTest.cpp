@@ -24,25 +24,22 @@ class TestOp : public OperationInterface
 class ActionTest : public testing::Test 
 {
 protected:
-    Vec nextpos{0, 0};
-
     void SetUp() override
-    {
-        // prepare positions
-        PositionSystem::instance().add(id1, Vec(100, 100));
-        PositionSystem::instance().add(id2, Vec(200, 100));
-        // prepare actions
-        std::vector<OperationId> actor, reactor;
-        actor.push_back(1);
-        reactor.push_back(1);
-        ActionSystem::instance().add(id1, 25, 25, 50, 50, actor, reactor);
-        ActionSystem::instance().add(id2, 25, 25, 50, 50, actor, reactor);
-        OperationManager::instance().add(&op);
+    {        
     }
 };
 
 TEST_F(ActionTest, TestInitialization)
 {
+    PositionSystem::instance().add(id1, Vec(150, 100));
+    PositionSystem::instance().add(id2, Vec(200, 100));
+    // prepare actions
+    std::vector<OperationId> actor, reactor;
+    actor.push_back(0);
+    reactor.push_back(0);
+    ActionSystem::instance().add(id1, 25, 25, 50, 50, actor, reactor);
+    ActionSystem::instance().add(id2, 25, 25, 50, 50, actor, reactor);
+    OperationManager::instance().add(&op);
     EXPECT_FALSE(ActionSystem::instance().get(id1) == nullptr);
     EXPECT_FALSE(ActionSystem::instance().get(id2) == nullptr);
     EXPECT_EQ(ActionSystem::instance().get(id1)->actor_op.size(), 1);
@@ -79,15 +76,33 @@ TEST_F(ActionTest, UnassignOp)
     EXPECT_EQ(ActionSystem::instance().get(id2)->reactor_op.size(), 1);
 }
 
-TEST_F(ActionTest, TriggerNegative)
+TEST_F(ActionTest, NegativeNoIntersection)
 {
-    EXPECT_FALSE(ActionSystem::instance().trigger_action(id1, 1));
+    EXPECT_FALSE(ActionSystem::instance().trigger_action(id1, 0));
+    EXPECT_FALSE(ActionSystem::instance().trigger_action(id2, 0));
+    EXPECT_EQ(counter, 0);
+}
+
+TEST_F(ActionTest, NegativeOpOutOfRange)
+{
+    EXPECT_FALSE(ActionSystem::instance().trigger_action(id1, 10));
+    EXPECT_FALSE(ActionSystem::instance().trigger_action(id2, 10));
     EXPECT_EQ(counter, 0);
 }
 
 TEST_F(ActionTest, TriggerPositive)
 {
-    ActionSystem::instance().get(id1)->area.x = 149;
-    EXPECT_TRUE(ActionSystem::instance().trigger_action(id1, 1));
+    auto pod = ActionSystem::instance().get(id2);
+    pod->area.x = 149 - pod->xoffs;
+    EXPECT_TRUE(ActionSystem::instance().trigger_action(id1, 0));
     EXPECT_EQ(counter, 1);
+    EXPECT_TRUE(ActionSystem::instance().trigger_action(id2, 0));
+    EXPECT_EQ(counter, 2);
+}
+
+TEST_F(ActionTest, NegativeWrongOp)
+{
+    EXPECT_FALSE(ActionSystem::instance().trigger_action(id1, 10));
+    EXPECT_FALSE(ActionSystem::instance().trigger_action(id2, 10));
+    EXPECT_EQ(counter, 2);
 }
