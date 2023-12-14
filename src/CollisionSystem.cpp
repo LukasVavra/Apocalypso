@@ -36,7 +36,7 @@ bool CollisionSystem::update(long unsigned id, Vec position)
     SDL_Rect newrect{(int)position.x - collpod->xoffs, (int)position.y - collpod->yoffs, collpod->rect.w, collpod->rect.h};
     if(collpod->barrier)
     {
-        for(auto& pod : cntr)
+        for(const auto& pod : cntr)
         {
             if(pod.id == id || !pod.barrier) continue;
             if(SDL_HasIntersection(&newrect, &pod.rect)) return false;

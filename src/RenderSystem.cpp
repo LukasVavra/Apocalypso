@@ -31,7 +31,7 @@ void RenderSystem::remove(long unsigned id)
 void RenderSystem::render()
 {
     MapManager::instance().render();
-    for (auto &pod : ctnr)
+    for (const auto &pod : ctnr)
     {
         SDL_Rect dest(pod.des);
         if(camera) camera->update_render(dest);
@@ -61,7 +61,7 @@ void RenderSystem::set_camera(Camera *camera)
 long unsigned RenderSystem::get_clicked_id(int &x, int &y)
 {
     SDL_Point point{x, y};
-    for (auto &pod : ctnr)
+    for (const auto &pod : ctnr)
     {
         SDL_Rect area(pod.des);
         if(camera) camera->update_render(area);

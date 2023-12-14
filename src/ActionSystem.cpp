@@ -95,14 +95,14 @@ bool ActionSystem::has_op(ActionPOD& pod, OperationId op, bool actor)
 {
     if(actor)
     {
-        for(auto& o : pod.actor_op)
+        for(const auto& o : pod.actor_op)
         {
             if(o == op) return true;
         }
     }
     else
     {
-        for(auto& o : pod.reactor_op)
+        for(const auto& o : pod.reactor_op)
         {
             if(o == op) return true;
         }

@@ -1,5 +1,6 @@
 #include <RenderSystem.h>
 #include <PositionSystem.h>
+#include <ControllerSystem.h>
 #include <TextureManager.h>
 #include <Camera.h>
 #include <MouseManager.h>
@@ -27,6 +28,7 @@ Camera camera;
 #define mapman      MapManager::instance()
 #define objman      ObjectManager::instance()
 #define keyman      KeypadManager::instance()
+#define ctrlsys     ControllerSystem::instance()
 
 static bool running;
 
@@ -128,6 +130,7 @@ void init()
 
 void update()
 {
+    ctrlsys.update();
     motionsys.update();
     camera.update();
 }
