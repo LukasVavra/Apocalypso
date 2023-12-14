@@ -17,7 +17,7 @@ public:
 	void watch_id(long unsigned id);
 	void unwatch();
 	void update();
-	Vec get_map_position(int &x, int &y);
+	Vec convert_position(int &x, int &y);
 	void move_up();
 	void move_down();
 	void move_left();

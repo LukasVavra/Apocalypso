@@ -51,6 +51,6 @@ void UiController::right_btn(int &x, int &y)
 {
     if(controlled_id && camera)
     {
-        MotionSystem::instance().set_target(controlled_id, camera->get_map_position(x, y));
+        MotionSystem::instance().set_target(controlled_id, camera->convert_position(x, y));
     }
 }

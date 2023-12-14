@@ -21,7 +21,6 @@ public:
     void set_camera(Camera* camera);
     void left_btn(int& x, int& y);
     void right_btn(int& x, int& y);
-    Vec get_map_position(int& x, int& y);
     void add_observer(MouseObserver* observer);
     void remove_observer(MouseObserver* observer);
 

@@ -79,7 +79,7 @@ void Camera::update()
 	}
 }
 
-Vec Camera::get_map_position(int &x, int &y)
+Vec Camera::convert_position(int &x, int &y)
 {
     int cx = x + _view.x;
 	int cy = y + _view.y;
