@@ -15,41 +15,44 @@ void MouseManager::set_camera(Camera *camera)
 
 void MouseManager::left_btn(int &x, int &y)
 {
-    if(observers.size())
+    for(auto& observer : observers)
     {
-        for(auto& observer : observers)
-        {
-            observer->left_btn(x, y);
-        }
+        observer->left_btn(x, y);
     }
-    int cx = x + camera->view().x;
-    int cy = y + camera->view().y;
     auto id = RenderSystem::instance().get_clicked_id(x, y);
     set_controlled_id(id);
-    camera->watch_id(id);
+    if(camera) camera->watch_id(id);
 }
 
 void MouseManager::right_btn(int &x, int &y)
 {
-    if(observers.size())
+    for(auto& observer : observers)
     {
-        for(auto& observer : observers)
-        {
-            observer->right_btn(x, y);
-        }
+        observer->right_btn(x, y);
     }
     if(controlled_id)
     {
-        // calculate map position
+        MotionSystem::instance().set_target(controlled_id, get_map_position(x,y));
+    }
+}
+
+Vec MouseManager::get_map_position(int &x, int &y)
+{
+    if(camera)
+    {
         int cx = x + camera->view().x;
         int cy = y + camera->view().y;
-        MotionSystem::instance().set_target(controlled_id, Vec(cx,cy));
+        return Vec(cx, cy);
     }
+    return Vec();
 }
 
 void MouseManager::add_observer(MouseObserver *observer)
 {
-    observers.push_back(observer);
+    if(std::find(observers.begin(), observers.end(), observer) == observers.end())
+    {
+        observers.push_back(observer);
+    }
 }
 
 void MouseManager::remove_observer(MouseObserver *observer)
