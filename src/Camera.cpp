@@ -79,26 +79,51 @@ void Camera::update()
 	}
 }
 
-void Camera::move_up()
+void Camera::key_down(SDL_Keysym &key)
 {
 	unwatch();
+	switch(key.sym)
+	{
+		case SDLK_UP:
+			move_up();
+		break;
+
+		case SDLK_DOWN:
+			move_down();
+		break;
+
+		case SDLK_LEFT:
+			move_left();
+		break;
+
+		case SDLK_RIGHT:
+			move_right();
+		break;
+		default:
+		break;
+	}
+}
+
+void Camera::key_up(SDL_Keysym &key)
+{
+}
+
+void Camera::move_up()
+{
 	_view.y = _view.y < move_step ? 0 : _view.y - move_step;
 }
 
 void Camera::move_down()
 {
-	unwatch();
 	_view.y = (mh - (_view.y + _view.h)) < move_step ? (mh - _view.h) : _view.y + move_step;
 }
 
 void Camera::move_left()
 {
-	unwatch();
 	_view.x = _view.x < move_step ? 0 : _view.x - move_step;
 }
 
 void Camera::move_right()
 {
-	unwatch();
 	_view.x = (mw - (_view.x + _view.w)) < move_step ? (mw - _view.w) : _view.x + move_step;
 }

@@ -1,17 +1,31 @@
 #include "KeypadManager.h"
-#include <iostream>
+#include <algorithm>
 
 void KeypadManager::key_down(SDL_Keysym &key)
 {
-    if(action.count(key.sym) > 0) action[key.sym]();
+    for(auto& observer : observers)
+    {
+        observer->key_down(key);
+    }    
 }
 
 void KeypadManager::key_up(SDL_Keysym &key)
 {
-
+    for(auto& observer : observers)
+    {
+        observer->key_up(key);
+    }
 }
 
-void KeypadManager::register_action(int32_t keysym, callback f)
+void KeypadManager::add_observer(KeypadObserver *observer)
 {
-    action[keysym] = f;
+    if(std::find(observers.begin(), observers.end(), observer) == observers.end())
+    {
+        observers.push_back(observer);
+    }
+}
+
+void KeypadManager::remove_observer(KeypadObserver *observer)
+{
+    observers.erase(std::remove(observers.begin(), observers.end(), observer), observers.end());
 }
