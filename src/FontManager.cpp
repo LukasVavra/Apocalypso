@@ -8,17 +8,17 @@ bool FontManager::init()
         return false;
     }
     font[FontType::Regular] = TTF_OpenFont("font/Orbitron-Regular.ttf", 24);
-    if (!font) {
+    if (!font[FontType::Regular]) {
         std::cerr << "Font loading failed: " << TTF_GetError() << "\n";
         return false;
     }
     font[FontType::Medium] = TTF_OpenFont("font/Orbitron-Bold.ttf", 24);
-    if (!font) {
+    if (!font[FontType::Medium]) {
         std::cerr << "Font loading failed: " << TTF_GetError() << "\n";
         return false;
     }
     font[FontType::Bold] = TTF_OpenFont("font/Orbitron-Black.ttf", 24);
-    if (!font) {
+    if (!font[FontType::Bold]) {
         std::cerr << "Font loading failed: " << TTF_GetError() << "\n";
         return false;
     }
