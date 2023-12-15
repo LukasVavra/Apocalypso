@@ -8,6 +8,7 @@
 #include <ObjectManager.h>
 #include <MapManager.h>
 #include <KeypadManager.h>
+#include <FontManager.h>
 #include <SDL2/SDL.h>
 #include <assert.h>
 #include <iostream>
@@ -29,6 +30,7 @@ Camera camera;
 #define mapman      MapManager::instance()
 #define objman      ObjectManager::instance()
 #define keyman      KeypadManager::instance()
+#define fontman     FontManager::instance()
 #define ctrlsys     ControllerSystem::instance()
 
 static bool running;
@@ -103,6 +105,11 @@ void init()
     assert(renderer && RenderSystem::renderer && "RENDERER INIT");
 
     /*
+     * Init font manager
+     */
+    fontman.init();
+
+    /*
      * Create map
      */
     mapman.init();
@@ -149,6 +156,7 @@ void render()
 
 void clean()
 {
+    fontman.clean();
     TextureManager::instance().clean();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
