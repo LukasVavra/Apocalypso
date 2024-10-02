@@ -1,0 +1,10 @@
+[{
+    "name" : "a",
+    "liquid_temp": 0,
+    "gas_temp" : 100
+},
+{
+    "name" : "b",
+    "liquid_temp": 150,
+    "gas_temp" : 800
+}]

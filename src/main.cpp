@@ -9,6 +9,7 @@
 #include <MapManager.h>
 #include <KeypadManager.h>
 #include <FontManager.h>
+#include <ResourceManager.h>
 #include <SDL2/SDL.h>
 #include <assert.h>
 #include <iostream>
@@ -31,6 +32,7 @@ Camera camera;
 #define objman      ObjectManager::instance()
 #define keyman      KeypadManager::instance()
 #define fontman     FontManager::instance()
+#define resman      ResourceManager::instance()
 #define ctrlsys     ControllerSystem::instance()
 
 static bool running;
@@ -129,9 +131,14 @@ void init()
     ctrlsys.create_controller<UiController>(&camera);
 
     /*
+     * Load resources
+     */
+    //resman.init();
+
+    /*
      * Load objects
      */
-    objman.loadObjects("json/objects.json");
+    //objman.loadObjects("json/objects.json");
 
     /*
      * Start loop
