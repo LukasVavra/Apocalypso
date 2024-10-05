@@ -1,4 +1,5 @@
 #include <Engine.h>
+#include <EventSystem.h>
 #include <RenderSystem.h>
 #include <PositionSystem.h>
 #include <ControllerSystem.h>
@@ -18,6 +19,7 @@
  */
 Camera camera;
 CameraController camctrl;
+#define eventsys    EventSystem::instance()
 #define rendersys   RenderSystem::instance()
 #define positionsys PositionSystem::instance()
 #define motionsys   MotionSystem::instance()
@@ -61,6 +63,8 @@ void Engine::init()
     renderer = SDL_CreateRenderer(window, -1, 0);
     RenderSystem::renderer = renderer;
     assert(renderer && RenderSystem::renderer && "RENDERER INIT");
+
+    eventsys;
 
     /*
      * Init font manager
