@@ -25,6 +25,7 @@ void EventSystem::emit(EventId id, void *data)
 
 bool EventSystem::subscribe(EventId id, EventCallback cb)
 {
+    if(id == EventId::EVENT_MAX) return false;
     auto& evt = events[static_cast<unsigned int>(id)];
     if(evt.cb_counter < EVT_CB_MAX)
     {
@@ -37,6 +38,7 @@ bool EventSystem::subscribe(EventId id, EventCallback cb)
 
 bool EventSystem::unsubscribe(EventId id, EventCallback cb)
 {
+    if(id == EventId::EVENT_MAX) return false;
     int i = 0;
     auto& evt = events[static_cast<unsigned int>(id)];
     while(i < evt.cb_counter && (evt.cb[i] != cb)) ++i; // search for callback pointer

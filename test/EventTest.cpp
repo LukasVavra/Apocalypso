@@ -17,20 +17,20 @@ void test_callback(void* data)
 }
 
 TEST(EventTest, SubscribeMaxCallbacks) {
-    EXPECT_TRUE(eventsys.subscribe(EventId::EVENT1, test_callback));
-    EXPECT_TRUE(eventsys.subscribe(EventId::EVENT1, test_callback));
-    EXPECT_TRUE(eventsys.subscribe(EventId::EVENT1, test_callback));
-    EXPECT_TRUE(eventsys.subscribe(EventId::EVENT1, test_callback));
-    EXPECT_TRUE(eventsys.subscribe(EventId::EVENT1, test_callback));
-    EXPECT_TRUE(eventsys.subscribe(EventId::EVENT1, test_callback));
-    EXPECT_TRUE(eventsys.subscribe(EventId::EVENT1, test_callback));
-    EXPECT_TRUE(eventsys.subscribe(EventId::EVENT1, test_callback));
-    EXPECT_FALSE(eventsys.subscribe(EventId::EVENT1, test_callback));
+    EXPECT_TRUE(eventsys.subscribe(EventId::QUIT, test_callback));
+    EXPECT_TRUE(eventsys.subscribe(EventId::QUIT, test_callback));
+    EXPECT_TRUE(eventsys.subscribe(EventId::QUIT, test_callback));
+    EXPECT_TRUE(eventsys.subscribe(EventId::QUIT, test_callback));
+    EXPECT_TRUE(eventsys.subscribe(EventId::QUIT, test_callback));
+    EXPECT_TRUE(eventsys.subscribe(EventId::QUIT, test_callback));
+    EXPECT_TRUE(eventsys.subscribe(EventId::QUIT, test_callback));
+    EXPECT_TRUE(eventsys.subscribe(EventId::QUIT, test_callback));
+    EXPECT_FALSE(eventsys.subscribe(EventId::QUIT, test_callback));
 }
 
 TEST(EventTest, Emit) {
     test_data data;
     data.id = 10;
     data.text = "hello";
-    eventsys.emit(EventId::EVENT1, &data);
+    eventsys.emit(EventId::QUIT, &data);
 }
