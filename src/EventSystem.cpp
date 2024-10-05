@@ -20,22 +20,18 @@ void EventSystem::init()
 void EventSystem::emit(EventId id, void *data)
 {
     auto& evt = events[static_cast<unsigned int>(id)];
-    for(int i = 0; i < EVT_CB_MAX; ++i)
-    {
-        if(evt.cb[i]) evt.cb[i](data);
-    }
+    for(int i = 0; i < evt.cb_counter; ++i) evt.cb[i](data);
 }
 
 bool EventSystem::subscribe(EventId id, EventCallback cb)
 {
-    int i = 0;
     auto& evt = events[static_cast<unsigned int>(id)];
-    while(i < EVT_CB_MAX && (evt.cb[i] != nullptr)) ++i;
-    if(i < EVT_CB_MAX)
+    if(evt.cb_counter < EVT_CB_MAX)
     {
-        evt.cb[i] = cb;
+        evt.cb[evt.cb_counter] = cb;
+        evt.cb_counter++;
         return true;
-    } 
+    }
     return false;
 }
 
@@ -43,11 +39,20 @@ bool EventSystem::unsubscribe(EventId id, EventCallback cb)
 {
     int i = 0;
     auto& evt = events[static_cast<unsigned int>(id)];
-    while(i < EVT_CB_MAX && (evt.cb[i] != cb)) ++i;
-    if(i < EVT_CB_MAX)
+    while(i < evt.cb_counter && (evt.cb[i] != cb)) ++i; // search for callback pointer
+    if(i < evt.cb_counter) // cb found
     {
-        evt.cb[i] = nullptr;
+        if(i < (evt.cb_counter - 1)) // not last in array
+        {
+            evt.cb[i] = evt.cb[evt.cb_counter - 1]; // reorder callbacks
+            evt.cb[evt.cb_counter - 1] = nullptr;
+        }
+        else
+        {
+            evt.cb[i] = nullptr;
+        }
+        evt.cb_counter--;
         return true;
-    } 
+    }
     return false;
 }

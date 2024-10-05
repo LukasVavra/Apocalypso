@@ -8,13 +8,14 @@ enum class EventId
 {
     EVENT1,
     EVENT2,
-    EVENT_MAX // do not use ! only for internal purposes
+    EVENT_MAX // do not change ! only for internal purposes
 };
 
 struct Event
 {
     EventId id;
     EventCallback cb[EVT_CB_MAX];
+    unsigned int cb_counter = 0;
 };
 
 class EventSystem : public Singleton<EventSystem>
