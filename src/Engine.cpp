@@ -1,14 +1,14 @@
 #include <Engine.h>
+#include <EventSystem.h>
 #include <RenderSystem.h>
 #include <PositionSystem.h>
+#include <MotionSystem.h>
 #include <ControllerSystem.h>
 #include <CameraController.h>
 #include <TextureManager.h>
 #include <Camera.h>
-#include <MouseManager.h>
 #include <ObjectManager.h>
 #include <MapManager.h>
-#include <KeypadManager.h>
 #include <FontManager.h>
 #include <assert.h>
 #include <iostream>
@@ -17,14 +17,13 @@
  * Apocalypso system
  */
 Camera camera;
-CameraController camctrl;
+#define camctrl     CameraController::instance()
+#define eventsys    EventSystem::instance()
 #define rendersys   RenderSystem::instance()
 #define positionsys PositionSystem::instance()
 #define motionsys   MotionSystem::instance()
-#define mouseman    MouseManager::instance()
 #define mapman      MapManager::instance()
 #define objman      ObjectManager::instance()
-#define keyman      KeypadManager::instance()
 #define fontman     FontManager::instance()
 #define ctrlsys     ControllerSystem::instance()
 
@@ -62,6 +61,8 @@ void Engine::init()
     RenderSystem::renderer = renderer;
     assert(renderer && RenderSystem::renderer && "RENDERER INIT");
 
+    eventsys;
+
     /*
      * Init font manager
      */
@@ -79,7 +80,6 @@ void Engine::init()
     camera.set_map_size(MapManager::MAP_WIDTH * MapManager::TILE_WIDTH, MapManager::MAP_HEIGHT * MapManager::TILE_HEIGHT);
     camctrl.set_camera(&camera);
     rendersys.set_camera(&camera);
-    mouseman.set_camera(&camera);
     mapman.set_camera(&camera);
 
     /*
@@ -119,15 +119,16 @@ void Engine::handle_events()
     {
         if (event.type == SDL_QUIT)
         {
+            eventsys.emit(EventId::QUIT, nullptr);
             running = false;
         }
         if (event.type == SDL_KEYDOWN)
         {
-            keyman.key_down(event.key.keysym);
+            eventsys.emit(EventId::KEY_DOWN, (void*) &event.key.keysym);
         }
         else if (event.type == SDL_KEYUP)
         {
-            keyman.key_up(event.key.keysym);
+            eventsys.emit(EventId::KEY_UP, (void*) &event.key.keysym);
         }
         if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED)
         {
@@ -135,15 +136,15 @@ void Engine::handle_events()
         }
         if (event.type == SDL_MOUSEBUTTONDOWN)
         {
-            int x, y;
-            SDL_GetMouseState(&x, &y);
+            struct {int x,y;} p;
+            SDL_GetMouseState(&p.x, &p.y);
             if(event.button.button == SDL_BUTTON_LEFT)
             {
-                mouseman.left_btn(x, y);
+                eventsys.emit(EventId::MOUSE_LEFT, (void*)&p);
             }
             else 
             {
-                mouseman.right_btn(x, y);
+                eventsys.emit(EventId::MOUSE_RIGHT, (void*)&p);
             }
         }
     }

@@ -3,7 +3,6 @@
 #include <PositionSystem.h>
 #include <Vec.h>
 #include <SDL2/SDL.h>
-#include <KeypadManager.h>
 
 class Camera
 {

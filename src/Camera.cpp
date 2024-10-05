@@ -1,5 +1,4 @@
 #include <Camera.h>
-#include <KeypadManager.h>
 
 Camera::Camera() : _view{0, 0, 0, 0}, mw(0), mh(0), pospod_eye(nullptr)
 {}
