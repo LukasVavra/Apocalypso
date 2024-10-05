@@ -1,16 +1,18 @@
-#include "UiController.h"
+#include <CameraController.h>
+#include <RenderSystem.h>
 
-UiController::UiController(Camera* camera): camera(camera)
+CameraController::CameraController(): camera(nullptr)
 {
     KeypadManager::instance().add_observer(this);
     MouseManager::instance().add_observer(this);
 }
 
-void UiController::update(long unsigned id)
+void CameraController::set_camera(Camera *camera)
 {
+	this->camera = camera;
 }
 
-void UiController::key_down(SDL_Keysym &key)
+void CameraController::key_down(SDL_Keysym &key)
 {
     if(!camera) return;
     camera->unwatch();
@@ -36,20 +38,22 @@ void UiController::key_down(SDL_Keysym &key)
 	}
 }
 
-void UiController::key_up(SDL_Keysym &key)
+void CameraController::key_up(SDL_Keysym &key)
 {
 }
 
-void UiController::left_btn(int &x, int &y)
+void CameraController::left_btn(int &x, int &y)
 {
+	if(!camera) return;
     auto id = RenderSystem::instance().get_clicked_id(x, y);
     controlled_id = id;
-    if(camera) camera->watch_id(id);
+    camera->watch_id(id);
 }
 
-void UiController::right_btn(int &x, int &y)
+void CameraController::right_btn(int &x, int &y)
 {
-    if(controlled_id && camera)
+	if(!camera) return;
+    if(controlled_id)
     {
         MotionSystem::instance().set_target(controlled_id, camera->convert_position(x, y));
     }
