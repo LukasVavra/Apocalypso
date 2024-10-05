@@ -6,8 +6,11 @@ static constexpr unsigned int EVT_CB_MAX = 8;
 
 enum class EventId
 {
-    EVENT1,
-    EVENT2,
+    QUIT,
+    KEY_DOWN,
+    KEY_UP,
+    MOUSE_LEFT,
+    MOUSE_RIGHT,
     EVENT_MAX // do not change ! only for internal purposes
 };
 
