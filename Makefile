@@ -1,6 +1,6 @@
 CXX = /usr/bin/g++
 CXXFLAGS = -std=c++17 -Iinclude -Ilib -fdiagnostics-color=always -g
-LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
+LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_net
 SRC_DIR = src
 OBJ_DIR = obj
 TEST_DIR = test
@@ -13,14 +13,21 @@ OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS))
 TEST_SRCS := $(wildcard $(TEST_DIR)/*.cpp)
 TEST_OBJS := $(patsubst $(TEST_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(TEST_SRCS))
 
+IMGUI_SRCS := $(wildcard lib/imgui/*.cpp)
+IMGUI_OBJS := $(patsubst lib/imgui/%.cpp, $(OBJ_DIR)/%.o, $(IMGUI_SRCS))
+
 .PHONY: all clean test
 
 all: $(EXEC)
 
-$(EXEC): $(OBJS)
+$(EXEC): $(IMGUI_OBJS) $(OBJS)
 	$(CXX) $(CXXFLAGS) $^ $(LDFLAGS) -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	@mkdir -p $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+	
+$(OBJ_DIR)/%.o: lib/imgui/%.cpp
 	@mkdir -p $(OBJ_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 

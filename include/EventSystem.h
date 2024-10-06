@@ -11,6 +11,7 @@ enum class EventId
     KEY_UP,
     MOUSE_LEFT,
     MOUSE_RIGHT,
+    WINDOW_RESIZED,
     EVENT_MAX // do not change ! only for internal purposes
 };
 
@@ -26,6 +27,7 @@ class EventSystem : public Singleton<EventSystem>
 public:
     EventSystem();
     void init();
+    void emit(EventId id);
     void emit(EventId id, void* data);
     bool subscribe(EventId id, EventCallback cb);
     bool unsubscribe(EventId id, EventCallback cb);

@@ -10,6 +10,7 @@
 #include <ObjectManager.h>
 #include <MapManager.h>
 #include <FontManager.h>
+#include <GuiManager.h>
 #include <assert.h>
 #include <iostream>
 
@@ -26,6 +27,7 @@ Camera camera;
 #define objman      ObjectManager::instance()
 #define fontman     FontManager::instance()
 #define ctrlsys     ControllerSystem::instance()
+#define guiman      GuiManager::instance()
 
 Engine::Engine()
 {
@@ -57,11 +59,14 @@ void Engine::init()
     /*
      * Create SDL Renderer
      */
-    renderer = SDL_CreateRenderer(window, -1, 0);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     RenderSystem::renderer = renderer;
     assert(renderer && RenderSystem::renderer && "RENDERER INIT");
 
-    eventsys;
+    /*
+     * Init GUI manager
+     */
+    guiman.init(window, renderer);
 
     /*
      * Init font manager
@@ -105,6 +110,7 @@ void Engine::run()
 
 void Engine::clean()
 {
+    guiman.clean();
     fontman.clean();
     TextureManager::instance().clean();
     SDL_DestroyRenderer(renderer);
@@ -117,9 +123,10 @@ void Engine::handle_events()
     SDL_Event event;
     if (SDL_PollEvent(&event))
     {
+        guiman.handle_event(&event);
         if (event.type == SDL_QUIT)
         {
-            eventsys.emit(EventId::QUIT, nullptr);
+            eventsys.emit(EventId::QUIT);
             running = false;
         }
         if (event.type == SDL_KEYDOWN)
@@ -132,7 +139,11 @@ void Engine::handle_events()
         }
         if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED)
         {
-            camera.resize(SDL_GetWindowSurface(window)->w, SDL_GetWindowSurface(window)->h);
+            struct {int w,h;} d;
+            d.w = SDL_GetWindowSurface(window)->w;
+            d.h = SDL_GetWindowSurface(window)->h;
+            eventsys.emit(EventId::WINDOW_RESIZED, (void*) &d);
+            camera.resize(d.w, d.h);
         }
         if (event.type == SDL_MOUSEBUTTONDOWN)
         {
@@ -155,6 +166,7 @@ void Engine::update()
     ctrlsys.update();
     motionsys.update();
     camera.update();
+    guiman.update();
 }
 
 void Engine::render()
@@ -162,5 +174,6 @@ void Engine::render()
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
     rendersys.render();
+    guiman.render();
     SDL_RenderPresent(renderer);
 }

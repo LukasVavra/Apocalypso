@@ -17,6 +17,11 @@ void EventSystem::init()
     }
 }
 
+void EventSystem::emit(EventId id)
+{
+    emit(id, nullptr);
+}
+
 void EventSystem::emit(EventId id, void *data)
 {
     auto& evt = events[static_cast<unsigned int>(id)];

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Singleton.h>
+#include <SDL2/SDL.h>
 #include <Camera.h>
 
 class CameraController : public Singleton<CameraController>
