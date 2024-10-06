@@ -32,13 +32,16 @@ void GuiManager::handle_event(SDL_Event *event)
 
 void GuiManager::update()
 {
-    bool close_btn = true;
+    static bool show = true;
     ImGui_ImplSDLRenderer2_NewFrame();
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
-    ImGui::Begin("Hello, Dear ImGui with SDL2", &close_btn);
-    ImGui::Text("This is just a basic Hello World!");
-    ImGui::End();
+    if(show)
+    {
+        ImGui::Begin("Hello, Dear ImGui with SDL2", &show);
+        ImGui::Text("This is just a basic Hello World!");
+        ImGui::End();
+    }
     ImGui::Render();
 }
 
